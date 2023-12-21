@@ -1,0 +1,13 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+.delete-edit-wraper {
+  text-align: center;
+  background: #808080a8;
+  width: 154px;
+  border-radius: 21px;
+  padding: 4px;
+  margin: 0 auto;
+}
