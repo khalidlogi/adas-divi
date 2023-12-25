@@ -13,7 +13,7 @@
  * @package           Adas_Divi
  *
  * @wordpress-plugin
- * Plugin Name:       Adas-form-db-divi
+ * Plugin Name:       Adas Form Db Divi
  * Plugin URI:        https://url
  * Description:       Description: Enhance WPForms with a powerful database feature for effortless storage and organization of form submissions.
 
@@ -65,11 +65,12 @@ register_deactivation_hook(__FILE__, 'deactivate_adas_divi');
 /**
  * Add links in plugin page
  */
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'adas_links');
-function bookwize_form_action_links($links)
-{
-	$links[] = '<a href="' . esc_url(get_admin_url(null, 'options-general.php?page=bookwize')) . '">Settings</a>';
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'my_plugin_action_links');
 
+function my_plugin_action_links($links)
+{
+	$settings_link = '<a href="' . admin_url('/options-general.php?page=khdiviwplist.php') . '">Settings</a>';
+	$links[] = $settings_link;
 	return $links;
 }
 

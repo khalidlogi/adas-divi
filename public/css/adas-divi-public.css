@@ -5,7 +5,8 @@
 
 .delete-edit-wraper {
   text-align: center;
-  background: #808080a8;
+  background: #c3bbbb4f;
+  border: 1px solid gray;
   width: 154px;
   border-radius: 21px;
   padding: 4px;

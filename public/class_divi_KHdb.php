@@ -80,7 +80,7 @@ class class_divi_KHdb
          $sql = "CREATE TABLE IF NOT EXISTS " . $this->table_name . " (
                  id bigint(20) NOT NULL AUTO_INCREMENT,
                  form_id INT(11) NOT NULL,
-                 form_date DATETIME NOT NULL,
+                 date_submitted DATETIME NOT NULL,
                  form_value LONGTEXT NOT NULL,
                  PRIMARY KEY (id)
              ) $charset_collate;";
@@ -94,8 +94,25 @@ class class_divi_KHdb
     {
         global $wpdb;
         // Delete the row with the specified form_id
-        $wpdb->delete($this->table_name, array('id' => $id));
-        wp_die(); // terminate immediately and return a proper response
+
+        try {
+            // Prepared statement for security
+            $wpdb->prepare(
+                "DELETE FROM {$this->table_name} WHERE id = %d",
+                $id
+            );
+
+            // Execute deletion
+            $wpdb->query();
+
+            // Log success
+            error_log("Entry with ID $id deleted successfully");
+        } catch (Exception $e) {
+            // Log error
+            error_log("Error deleting entry: {$e->getMessage()}");
+            // Handle error gracefully, e.g., display user-friendly message
+        }
+
 
     }
 
@@ -114,32 +131,32 @@ class class_divi_KHdb
             // Select all rows.
             $query = "SELECT COUNT(DISTINCT id) FROM {$this->table_name}";
             $items_count = $wpdb->get_var($query);
-            error_log('$items_count: ' . print_r($items_count, true));
-            error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+            //error_log('$items_count: where $formid is empty ' . print_r($items_count, true));
+            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
             // Return the count of items. 
         } else {
 
             // existing array handling code
             if (strpos($formid, ',') !== false) {
-                error_log('formid items: ' . print_r($formid, true));
+                //error_log('formid items: ' . print_r($formid, true));
 
                 $formid = str_replace(' ', '', $formid);
                 $formid = explode(',', $formid); // Split the string into an array of IDs
-                error_log('$formid items ssss: ' . print_r($formid, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //error_log('$formid items ssss: ' . print_r($formid, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                 $placeholders = array_fill(0, count($formid), '%d');
                 $placeholders = implode(', ', $placeholders);
-                error_log('$placeholders: ' . print_r($placeholders, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //error_log('$placeholders: ' . print_r($placeholders, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
                 $query = $wpdb->prepare(
                     "SELECT COUNT(DISTINCT id) FROM {$this->table_name} WHERE contact_form_id IN ($placeholders)",
                     $formid
                 );
                 $items_count = $wpdb->get_var($query);
-                error_log($wpdb->last_error);
-                error_log('$items_count: ' . print_r($items_count, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //error_log($wpdb->last_error);
+                //error_log('empty($formid) ' . print_r($items_count, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
                 // Return the count of items. 
             } else {
                 $query = $wpdb->prepare(
@@ -198,32 +215,64 @@ class class_divi_KHdb
      */
     function retrieve_form_id()
     {
-        $divi_form_id_setting = get_option('divi_form_id_setting') ?: '';
+        global $wpdb;
+        $divi_form_id = maybe_unserialize(get_option('divi_form_id_setting'));
 
-        if (empty($divi_form_id_setting)) {
-            return null;
-            exit;
+        if (is_array($divi_form_id)) {
+
+            if (count($divi_form_id) === 1) {
+
+                $divi_form_id = $divi_form_id[0];
+            } else {
+                $divi_form_id = implode(', ', $divi_form_id);
+            }
+            return $divi_form_id;
         }
 
+        error_log('divi_form_id' . print_r($divi_form_id, true));
+        echo ($divi_form_id);
 
-        $divi_form_id = (get_option('divi_form_id_setting'));
+        if (empty($divi_form_id)) {
+            // see if there is a form Ids in the database
+            // Get the form IDs
+            $sql = "SELECT DISTINCT contact_form_id FROM {$this->table_name}";
+            $results = $wpdb->get_results($sql);
 
+            if (!empty($results)) {
+                error_log('$results: dfdf ' . print_r($results, true));
+                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                // Create an array to store the number of forms for each form ID
+                $form_id = array();
 
-        if (is_array($divi_form_id_setting)) {
-            $form_ids = array();
-
-            foreach ($divi_form_id_setting as $value) {
-                $form_ids[] = $value;
-
+                // Loop through the results and count the number of forms for each form ID
+                foreach ($results as $row) {
+                    $form_id[] = $row->contact_form_id;
+                }
+                $form_id = implode(' , ', $form_id);
+                error_log('$form_id: implode ' . print_r($form_id, true));
+                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                return $form_id;
+            } else {
+                return $divi_form_id;
             }
 
-            $divi_form_id = implode(' , ', $form_ids);
-            return $divi_form_id;
-        } else {
-            return $divi_form_id;
+        }
+    }
+    /*if (is_array($divi_form_id)) {
+        $form_ids = array();
+
+        foreach ($divi_form_id as $value) {
+            $form_ids[] = $value;
+
         }
 
-    }
+        $divi_form_id = implode(' , ', $form_ids);
+        return $divi_form_id;
+    } else {
+        return $divi_form_id;
+    }*/
+
+
 
 
     /**
@@ -235,12 +284,12 @@ class class_divi_KHdb
     {
         global $wpdb;
         $table = $wpdb->prefix . 'wpforms_db2';
-        $query = "SELECT DISTINCT form_date FROM {$table} ORDER BY form_date DESC LIMIT 3";
+        $query = "SELECT DISTINCT date_submitted FROM {$table} ORDER BY date_submitted DESC LIMIT 3";
         $results = $wpdb->get_results($query);
 
         $dates = array();
         foreach ($results as $result) {
-            $dates[] = $result->form_date;
+            $dates[] = $result->date_submitted;
         }
 
         return $dates;
@@ -273,8 +322,10 @@ class class_divi_KHdb
     function getDate()
     {
         global $wpdb;
-        $first_date_query = $wpdb->get_var("SELECT MIN(form_date) FROM $this->table_name");
-        $last_date_query = $wpdb->get_var("SELECT MAX(form_date) FROM $this->table_name");
+        $first_date_query = $wpdb->get_var("SELECT MIN(date_submitted) FROM $this->table_name");
+        error_log('$first_date_query: ' . print_r($first_date_query, true));
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+        $last_date_query = $wpdb->get_var("SELECT MAX(date_submitted) FROM $this->table_name");
         $datecsv = "Initial Date: $first_date_query | Final Date: $last_date_query";
         return $datecsv;
     }
@@ -305,19 +356,19 @@ class class_divi_KHdb
                 $formid,
                 $LIMIT
             );
-            error_log('$results: 1' . print_r($results, true));
-            error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+            //error_log('$results: 1' . print_r($results, true));
+            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
         } else {
             if (empty($items_per)) {
                 $results = $wpdb->get_results("SELECT id, contact_form_id, form_values FROM  $this->table_name ");
-                error_log('$results: empty($items_per) ' . print_r($results, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //error_log('$results: empty($items_per) ' . print_r($results, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
             } else {
                 if ($formid === null) {
                     $results = $wpdb->get_results("SELECT id, contact_form_id, form_values FROM  $this->table_name  ORDER BY id DESC ");
-                    error_log('$results: formid  null' . print_r($results, true));
-                    error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                    //error_log('$results: formid  null' . print_r($results, true));
+                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                 } else {
                     $results = $wpdb->get_results(
@@ -331,13 +382,13 @@ class class_divi_KHdb
                             $items_per
                            
                         )
-                    );   error_log('$offset: ' . print_r($offset, true)); 
-                            error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
-                     error_log('$formid: ' . print_r($formid, true)); 
-                            error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
-                    error_log('else results: ' . print_r($results, true));
-                    error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-                    error_log('offser is working');
+                    );   //error_log('$offset: ' . print_r($offset, true)); 
+                            //error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
+                     //error_log('$formid: ' . print_r($formid, true)); 
+                            //error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
+                    //error_log('else results: ' . print_r($results, true));
+                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                    //error_log('offser is working');
                 }
             }
         }
@@ -345,7 +396,7 @@ class class_divi_KHdb
         $results = $wpdb->get_results("SELECT * FROM  $this->table_name ");
 
         if ($results === false) {
-            error_log("SQL Error: " . $wpdb->last_error);
+            //error_log("SQL Error: " . $wpdb->last_error);
             return false;
         }
 
@@ -355,13 +406,13 @@ class class_divi_KHdb
             $serialized_data = $result->form_values;
             $form_id = $result->contact_form_id;
             $date = $result->date_submitted;
-            // error_log('$form_id: ' . print_r($form_id, true));
-            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+            // //error_log('$form_id: ' . print_r($form_id, true));
+            ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
             $id = $result->id;
 
             // Unserialize the serialized form value
             $unserialized_data = unserialize($serialized_data);
-            //error_log('form_value[data]' . print_r($unserialized_data, true));
+            ////error_log('form_value[data]' . print_r($unserialized_data, true));
 
 
             // Add the 'Comment or Message' value to the form_values array
@@ -392,28 +443,29 @@ class class_divi_KHdb
 
         // Log any errors
         if (!$results) {
-            error_log("Database error: " . $wpdb->last_error);
+            //error_log("Database error: " . $wpdb->last_error);
 
         } else {
             foreach ($results as $result) {
+                $date = $result->date_submitted;
 
-                print_r($result);
-                error_log('$result to test date: ' . print_r($result, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //print_r($result);
+                //error_log('$result to test date: ' . print_r($result, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                 $serialized_data = $result->form_values;
-                error_log('$serialized_data: ' . print_r($serialized_data, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                //error_log('$serialized_data: ' . print_r($serialized_data, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
                 $form_id = $result->contact_form_id;
                 $date = $result->date_submitted;
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-                // error_log('$form_id: ' . print_r($form_id, true));
                 //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                // //error_log('$form_id: ' . print_r($form_id, true));
+                ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
                 $id = $result->id;
 
                 // Unserialize the serialized form value
                 $unserialized_data = unserialize($serialized_data);
-                //error_log('form_value[data]' . print_r($unserialized_data, true));
+                ////error_log('form_value[data]' . print_r($unserialized_data, true));
 
 
                 // Add the 'Comment or Message' value to the form_values array
@@ -476,7 +528,7 @@ class class_divi_KHdb
                  } else {
                      $results = $wpdb->get_results("SELECT id, contact_form_id, form_values FROM  $this->table_name  where form_id IN($formid) ORDER BY id DESC
                  LIMIT  $offset, $items_per");
-                     error_log('offser is working');
+                     //error_log('offser is working');
                  }
              }
          }
@@ -484,7 +536,7 @@ class class_divi_KHdb
 
          //var_dump($results);
          if ($results === false) {
-             error_log("SQL Error: " . $wpdb->last_error);
+             //error_log("SQL Error: " . $wpdb->last_error);
              return false;
          }
 
@@ -528,7 +580,7 @@ class class_divi_KHdb
 
 
         if (!$results) {
-            error_log('get_results working KHdb class : ' . $wpdb->last_error);
+            //error_log('get_results working KHdb class : ' . $wpdb->last_error);
         }
 
 

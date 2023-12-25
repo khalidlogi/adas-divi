@@ -171,7 +171,8 @@ jQuery(document).ready(function ($) {
     window.location.href = custom_vars.ajax_url + "?" + $.param(data);
   });
 
-  $(".delete-btn, .deletebtn").on("click", function () {
+  $(".deletebtn").on("click", function () {
+    alert("tetststs");
     var form_id = $(this).data("form-id");
     var id = $(this).data("form-id");
     var nonce = $(this).data("nonce");

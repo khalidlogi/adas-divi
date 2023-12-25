@@ -114,6 +114,116 @@ class Adas_Divi_Public
 	}
 
 
+	function delete_form_row()
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'divi_table';
+
+		error_log('function delete_form_row() ');
+		$id = intval($_POST['id']);
+
+		error_log('function delete_form_row() is is ' . print_r($id, true));
+		error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+
+		if (!$id) {
+			wp_send_json_error('Invalid ID');
+			exit;
+		}
+		// Check permissions
+		if (!current_user_can('delete_posts')) {
+			wp_send_json_error('Insufficient permissions');
+			exit;
+		}
+
+		// Check for nonce security      
+		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+			wp_send_json_error('Busted');
+			die('Busted!');
+		}
+		try {
+			// Prepared statement for security
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$table_name} WHERE id = %d",
+					$id
+				)
+			);
+
+			// Log success
+			wp_send_json_success("Entry with ID $id deleted successfully");
+		} catch (Exception $e) {
+			// Log error
+			error_log("Error deleting entry: {$e->getMessage()}");
+			// Handle error gracefully, e.g., display user-friendly message
+		}
+
+		wp_send_json_success('ssssssssssssssssssssss ."' . $id . '"');
+
+		exit;
+	}
+	/**
+	 * delete form row by its id
+	 */
+	function delete_form_row2()
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'divi_table';
+
+
+		$id = intval($_POST['id']);
+		error_log('function delete_form_row() is is ' . print_r($id, true));
+		error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+
+		if (!$id) {
+			wp_send_json_error('Invalid ID');
+			exit;
+		}
+
+		// Check permissions
+		if (!current_user_can('delete_posts')) {
+			wp_send_json_error('Insufficient permissions');
+			exit;
+		}
+
+		// Check for nonce security      
+		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+			die('Busted!');
+		}
+
+
+		try {
+			// Prepared statement for security
+			$wpdb->prepare(
+				"DELETE FROM {$table_name} WHERE id = %d",
+				$id
+			);
+
+			// Execute deletion
+			$wpdb->query();
+
+			// Log success
+			error_log("Entry with ID $id deleted successfully");
+		} catch (Exception $e) {
+			// Log error
+			error_log("Error deleting entry: {$e->getMessage()}");
+			// Handle error gracefully, e.g., display user-friendly message
+		}
+
+
+
+		if (!$wpdb->delete()) {
+			wp_send_json_error('Error deleting');
+			exit;
+
+		}
+		wp_send_json_success('deleted successfully');
+		exit;
+
+	}
+
+
+
+
 	/**
 	 *  Update form values
 	 *
@@ -132,8 +242,8 @@ class Adas_Divi_Public
 
 		// Parse the serialized form data
 		parse_str($form_data, $fields);
-		//error_log('$fields222222: ' . print_r($fields, true));
-		//error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+		////error_log('$fields222222: ' . print_r($fields, true));
+		////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 
 		if (!$id) {
@@ -188,9 +298,9 @@ class Adas_Divi_Public
 		if ($et_contact_error == true) {
 			return;
 		}
-		//error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
-		//error_log('ET Contact Error: ' . print_r($et_contact_error, true));
-		//error_log('Contact Form Info: ' . print_r($contact_form_info, true));
+		////error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
+		////error_log('ET Contact Error: ' . print_r($et_contact_error, true));
+		////error_log('Contact Form Info: ' . print_r($contact_form_info, true));
 
 		// Serialize the array data
 		$form_values = serialize($processed_fields_values);
@@ -221,7 +331,13 @@ class Adas_Divi_Public
 			),
 			array(
 				'%s',
-				'%d', '%s', '%s', '%s', '%d', '%s', '%s' // Data format
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s' // Data format
 			)
 		);
 
@@ -271,34 +387,34 @@ class Adas_Divi_Public
 	}
 
 
-	// AJAX callback function to fetch user names
-	function tag_user_get_user_names()
-	{
-		$args = array('orderby' => 'display_name');
-		$wp_user_query = new WP_User_Query($args);
-		$authors = $wp_user_query->get_results();
-		$user_emails = array();
+	/* AJAX callback function to fetch user names
+																	  function tag_user_get_user_names()
+																	  {
+																		  $args = array('orderby' => 'display_name');
+																		  $wp_user_query = new WP_User_Query($args);
+																		  $authors = $wp_user_query->get_results();
+																		  $user_emails = array();
 
-		if (!empty($authors)) {
+																		  if (!empty($authors)) {
 
-			foreach ($authors as $author) {
-				$author_info = get_userdata($author->ID);
-				$user_emails[] = $author_info->user_email;
-				error_log('$user_emails: ' . print_r($user_emails, true));
-				error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-			}
-			error_log('user_emails: ' . print_r($user_emails, true));
-			error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-			wp_send_json_success($user_emails);
-		} else {
-			wp_send_json_error('No results');
-		}
-
-
+																			  foreach ($authors as $author) {
+																				  $author_info = get_userdata($author->ID);
+																				  $user_emails[] = $author_info->user_email;
+																				  //error_log('$user_emails: ' . print_r($user_emails, true));
+																				  //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																			  }
+																			  //error_log('user_emails: ' . print_r($user_emails, true));
+																			  //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																			  wp_send_json_success($user_emails);
+																		  } else {
+																			  wp_send_json_error('No results');
+																		  }
 
 
 
-	}
+
+
+																	  }*/
 
 
 	/**

@@ -104,9 +104,9 @@ class Adas_Divi
 		}
 
 		/* Plugin Folder URL.
-															  if (!defined('WPFORMS_PLUGIN_URL')) {
-																  define('KHFORM_URL', plugin_dir_url(__FILE__));
-															  }*/
+																							if (!defined('WPFORMS_PLUGIN_URL')) {
+																								define('KHFORM_URL', plugin_dir_url(__FILE__));
+																							}*/
 	}
 
 
@@ -160,6 +160,10 @@ class Adas_Divi
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-settings.php';
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/adas-enqueue.php';
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHPDF.php';
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHCSV.php';
 
 
 
@@ -229,17 +233,22 @@ class Adas_Divi
 		$this->loader->add_action('wp_ajax_update_form_values', $plugin_public, 'update_form_values');
 		$this->loader->add_action('wp_ajax_nopriv_update_form_values', $plugin_public, 'update_form_values');
 
-		
+		$this->loader->add_action('wp_ajax_delete_form_row', $plugin_public, 'delete_form_row');
+		$this->loader->add_action('wp_ajax_nopriv_delete_form_row', $plugin_public, 'delete_form_row');
+
+
 		$this->loader->add_action('wp_ajax_update_send_email', $plugin_public, 'send_email');
 		$this->loader->add_action('wp_ajax_nopriv_send_email', $plugin_public, 'send_email');
+
+
 
 
 
 		//tag useres
 		// Enqueue JavaScript and CSS files
 
-		$this->loader->add_action('wp_ajax_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
-		$this->loader->add_action('wp_ajax_nopriv_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
+		//$this->loader->add_action('wp_ajax_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
+		//$this->loader->add_action('wp_ajax_nopriv_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
 
 		// Insitantiate shortcode Class
 		new Adas_Divi_Shortcode();

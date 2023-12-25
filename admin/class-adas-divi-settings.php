@@ -88,7 +88,6 @@ class Adas_Divi_Settings
         $this->menu_slug = 'khdiviwplist.php';
 
         //Add settings link
-        add_filter('plugin_action_links_adas-divi/adas-divi.php', array($this, 'adas-divi_settings_link'), 10, 2);
 
         $this->form_action = 'options.php';
 
@@ -682,7 +681,7 @@ class Adas_Divi_Settings
         global $wpdb;
         $table_name = $wpdb->prefix . 'divi_table';
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
-        //error_log(print_r($results_formids, true));
+        ////error_log(print_r($results_formids, true));
 
         if (count($results_formids) > 0) {
             $selected_values = get_option('divi_form_id_setting');
@@ -699,7 +698,7 @@ class Adas_Divi_Settings
             <select name="divi_form_id_setting[]" multiple>
                 <?php
                 foreach ($results_formids as $form_id) {
-                    //error_log(print_r($form_id, true));
+                    ////error_log(print_r($form_id, true));
                     $option_value = esc_attr($form_id->contact_form_id);
                     // $selected = in_array($option_value, $selected_values) ? 'selected' : '';
                     echo "<option value='" . esc_html($option_value) . "' " . esc_html($this->cliowp_multiselected($selected_values, $option_value)) . ">

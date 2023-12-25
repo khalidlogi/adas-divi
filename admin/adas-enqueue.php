@@ -69,11 +69,11 @@ class EnqueueClass
         wp_enqueue_script('jquery-ui-core', plugin_dir_url(__FILE__) . '../assets/js/jquery-ui-core', array('jquery'), '1.0', true);
         wp_enqueue_script('jquery-ui-droppable');
 
-        wp_enqueue_script('tag-user-script', plugin_dir_url(__FILE__) . '../assets/js/tag-user-script.js', array('jquery'), '1.0.0', true);
-        wp_localize_script('tag-user-script', 'custom_vars', array('ajax_url' => admin_url('admin-ajax.php')));
+        //wp_enqueue_script('tag-user-script', plugin_dir_url(__FILE__) . '../assets/js/tag-user-script.js', array('jquery'), '1.0.0', true);
+        //wp_localize_script('tag-user-script', 'custom_vars', array('ajax_url' => admin_url('admin-ajax.php')));
 
-        wp_enqueue_script('tag-user-script-email', plugin_dir_url(__FILE__) . '../assets/js/tag-user-script-email.js', array('jquery'), '1.0.0', true);
-        wp_localize_script('tag-user-script-email', 'custom_vars', array('ajax_url' => admin_url('admin-ajax.php')));
+        //wp_enqueue_script('tag-user-script-email', plugin_dir_url(__FILE__) . '../assets/js/tag-user-script-email.js', array('jquery'), '1.0.0', true);
+        //wp_localize_script('tag-user-script-email', 'cgit branchustom_vars', array('ajax_url' => admin_url('admin-ajax.php')));
 
     }
 
