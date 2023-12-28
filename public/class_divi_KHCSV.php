@@ -27,12 +27,10 @@ if (!class_exists('class_divi_KHCSV')) {
         {
             global $wpdb;
 
+            global $wpdb;
+            $this->myselectedformid = class_divi_KHdb::getInstance()->retrieve_form_id();
 
-            // Create an instance of KHdb
-            $formbyid = $this->myselectedformid;
-
-            $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($formbyid);
-
+            $form_values = class_divi_KHdb::getInstance()->retrieve_form_values_pdf($this->myselectedformid);
             // Retrieve the form values from the database
             if (empty($form_values)) {
                 wp_send_json_error('Error fetching data');
@@ -47,14 +45,27 @@ if (!class_exists('class_divi_KHCSV')) {
             $csv_table = "ID, Form ID, Field, Value\n";
 
             foreach ($form_values as $form_value) {
-                $form_id = $form_value['contact_form_id'];
-                $id = $form_value['id'];
-                $data = $form_value['data'];
+                //error_log('$form_values data: ' . print_r($form_value['data'], true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
-                foreach ($data as $key => $value) {
-                    // Escape commas and quotes in values
-                    $value = str_replace(',', '\,', $value);
-                    $value = str_replace('"', '\"', $value);
+                $form_id = ($form_value['contact_form_id']);
+                $id = intval($form_value['id']);
+                $date = $form_value['date'];
+
+                foreach ($form_value['data'] as $key => $value) {
+                    ////error_log(print_r($data, true));
+                    $id = $form_value['id'];
+
+                    if (is_array($value)) {
+                        if (array_key_exists('value', $value)) {
+                            $value = $value['value'];
+                        }
+                    }
+
+                    if (is_array($value) && array_key_exists('value', $value)) {
+                        $value = str_replace(',', '\,', $value);
+                        $value = str_replace('"', '\"', $value);
+                    }
 
                     // Add row to CSV table
                     $csv_table .= "$id, $form_id, \"$key\", \"$value\"\n";
