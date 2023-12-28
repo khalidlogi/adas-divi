@@ -329,6 +329,51 @@ class class_divi_KHdb
     }
 
 
+    public function retrieve_form_values_pdf($formid = '')
+    {
+
+        global $wpdb;
+        $query = "SELECT * FROM {$this->table_name} ORDER BY date_submitted DESC";
+        $results = $wpdb->get_results($query);
+
+        if (!$results) {
+            error_log("Database error: " . $wpdb->last_error);
+
+        } else {
+            foreach ($results as $result) {
+                $date = $result->date_submitted;
+                $serialized_data = $result->form_values;
+                //error_log('$serialized_data: ' . print_r($serialized_data, true));
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                $form_id = $result->contact_form_id;
+                $date = $result->date_submitted;
+                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                // //error_log('$form_id: ' . print_r($form_id, true));
+                ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                $id = $result->id;
+
+                // Unserialize the serialized form value
+                $unserialized_data = unserialize($serialized_data);
+                ////error_log('form_value[data]' . print_r($unserialized_data, true));
+
+
+                // Add the 'Comment or Message' value to the form_values array
+                $form_values[] = array(
+                    'contact_form_id' => $form_id,
+                    'id' => $id,
+                    'date' => $date,
+                    'data' => $unserialized_data,
+                    'fields' => $unserialized_data,
+                );
+
+            }
+            return $form_values;
+        }
+
+
+    }
+
+
     public function retrieve_form_values($formid = '', $offset = '', $items_per = '', $LIMIT = '')
     {
         global $wpdb;

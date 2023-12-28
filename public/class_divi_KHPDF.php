@@ -71,7 +71,9 @@ if (!class_exists('class_divi_KHPDF')) {
 
                 $formbyid = $this->myselectedformid;
 
-                $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($formbyid);
+                $form_values = class_divi_KHdb::getInstance()->retrieve_form_values_pdf($formbyid);
+                error_log('$form_values: pdf' . print_r($form_values, true));
+                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 
                 /* Start building the HTML table
@@ -169,8 +171,11 @@ if (!class_exists('class_divi_KHPDF')) {
                 $isOddRow = false; // Initialize as false
 
                 foreach ($form_values as $form_value) {
-                    $form_id = $form_value['contact_form_id'];
-                    $data = $form_value['data'];
+                    //error_log('$form_values data: ' . print_r($form_value['data'], true));
+                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+
+                    $form_id = ($form_value['contact_form_id']);
+                    $id = intval($form_value['id']);
                     $date = $form_value['date'];
 
                     // Toggle the $isOddRow flag to alternate background colors
@@ -184,9 +189,16 @@ if (!class_exists('class_divi_KHPDF')) {
 
 
 
-                    foreach ($data as $key => $value) {
+                    foreach ($form_value['data'] as $key => $value) {
                         ////error_log(print_r($data, true));
                         $id = $form_value['id'];
+
+                        if (is_array($value)) {
+                            if (array_key_exists('value', $value)) {
+                                $value = $value['value'];
+                            }
+                        }
+
                         $value = empty($value) ? "----" : $value;
                         //error_log('$date: ' . print_r($date, true));
                         //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
