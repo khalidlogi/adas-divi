@@ -16,7 +16,9 @@ class class_divi_KHdb
     {
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'divi_table';
+
         $this->formid = $this->retrieve_form_id();
+        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
         //$this->count_items();
     }
 
@@ -48,20 +50,16 @@ class class_divi_KHdb
         }
     }
 
-    public function is_wpforms_active()
+    public function is_divi_active()
     {
-        /* Check if get_plugins() function exists. This is required on the front end
-        if (!function_exists('get_plugins')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
 
-        if (
-            is_plugin_active('wpforms-lite/wpforms.php') || is_plugin_active('wpforms/wpforms.php')
-        ) {
+        if ('Divi' === wp_get_theme()->get('Name')) {
             return true;
+
         } else {
             return false;
-        }*/
+        }
+
     }
 
 
@@ -335,6 +333,7 @@ class class_divi_KHdb
     {
         global $wpdb;
 
+
         if (!empty($formid)) {
             $formid = $formid;
         } else {
@@ -343,93 +342,16 @@ class class_divi_KHdb
 
         if (!empty($items_per)) {
             $items_per = $items_per;
-        } else {
-            $items_per = (get_option('number_id_setting')) ?: '2';
         }
 
-        /*
-        //check if there is a limit
-        if (!empty($LIMIT) && (!empty($formid))) {
-            $results = $wpdb->prepare(
-
-                "SELECT id, contact_form_id, form_values FROM $this->table_name WHERE contact_form_id = %s ORDER BY id DESC LIMIT %d",
-                $formid,
-                $LIMIT
-            );
-            //error_log('$results: 1' . print_r($results, true));
-            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-        } else {
-            if (empty($items_per)) {
-                $results = $wpdb->get_results("SELECT id, contact_form_id, form_values FROM  $this->table_name ");
-                //error_log('$results: empty($items_per) ' . print_r($results, true));
-                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-            } else {
-                if ($formid === null) {
-                    $results = $wpdb->get_results("SELECT id, contact_form_id, form_values FROM  $this->table_name  ORDER BY id DESC ");
-                    //error_log('$results: formid  null' . print_r($results, true));
-                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-                } else {
-                    $results = $wpdb->get_results(
-
-                        $wpdb->prepare(
-                            "SELECT id, contact_form_id, form_values FROM {$this->table_name} WHERE contact_form_id IN (%s) ORDER BY id DESC LIMIT %d, %d",
-                            $formid,
-                           
-                            $offset,
-                         
-                            $items_per
-                           
-                        )
-                    );   //error_log('$offset: ' . print_r($offset, true)); 
-                            //error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
-                     //error_log('$formid: ' . print_r($formid, true)); 
-                            //error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
-                    //error_log('else results: ' . print_r($results, true));
-                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-                    //error_log('offser is working');
-                }
-            }
-        }
-
-        $results = $wpdb->get_results("SELECT * FROM  $this->table_name ");
-
-        if ($results === false) {
-            //error_log("SQL Error: " . $wpdb->last_error);
-            return false;
-        }
-
-        $form_values = array();
-
-        foreach ($results as $result) {
-            $serialized_data = $result->form_values;
-            $form_id = $result->contact_form_id;
-            $date = $result->date_submitted;
-            // //error_log('$form_id: ' . print_r($form_id, true));
-            ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-            $id = $result->id;
-
-            // Unserialize the serialized form value
-            $unserialized_data = unserialize($serialized_data);
-            ////error_log('form_value[data]' . print_r($unserialized_data, true));
-
-
-            // Add the 'Comment or Message' value to the form_values array
-            $form_values[] = array(
-                'contact_form_id' => $form_id,
-                'id' => $id,
-                'date' => $date,
-                'data' => $unserialized_data,
-                'fields' => $unserialized_data,
-            );
-
-        }
-*/
 
         // Run the query
 
+        error_log('$offset: ' . print_r($offset, true));
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
+        //$offset = 2;
+        //$items_per = 22;
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT DISTINCT id, form_values, contact_form_id,date_submitted FROM {$this->table_name} LIMIT %d, %d",
@@ -438,20 +360,15 @@ class class_divi_KHdb
             )
         );
 
-        // Print and inspect results
-        //print_r($results);
 
-        // Log any errors
         if (!$results) {
-            //error_log("Database error: " . $wpdb->last_error);
+            error_log("Database error: " . $wpdb->last_error);
 
         } else {
             foreach ($results as $result) {
                 $date = $result->date_submitted;
 
-                //print_r($result);
-                //error_log('$result to test date: ' . print_r($result, true));
-                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+
 
                 $serialized_data = $result->form_values;
                 //error_log('$serialized_data: ' . print_r($serialized_data, true));

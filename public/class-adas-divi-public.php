@@ -119,11 +119,11 @@ class Adas_Divi_Public
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'divi_table';
 
-		error_log('function delete_form_row() ');
+		//error_log('function delete_form_row() ');
 		$id = intval($_POST['id']);
 
-		error_log('function delete_form_row() is is ' . print_r($id, true));
-		error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+		//error_log('function delete_form_row() is is ' . print_r($id, true));
+		//error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 		if (!$id) {
 			wp_send_json_error('Invalid ID');
@@ -153,7 +153,7 @@ class Adas_Divi_Public
 			wp_send_json_success("Entry with ID $id deleted successfully");
 		} catch (Exception $e) {
 			// Log error
-			error_log("Error deleting entry: {$e->getMessage()}");
+			//error_log("Error deleting entry: {$e->getMessage()}");
 			// Handle error gracefully, e.g., display user-friendly message
 		}
 
@@ -171,8 +171,8 @@ class Adas_Divi_Public
 
 
 		$id = intval($_POST['id']);
-		error_log('function delete_form_row() is is ' . print_r($id, true));
-		error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+		//error_log('function delete_form_row() is is ' . print_r($id, true));
+		//error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 		if (!$id) {
 			wp_send_json_error('Invalid ID');
@@ -202,10 +202,10 @@ class Adas_Divi_Public
 			$wpdb->query();
 
 			// Log success
-			error_log("Entry with ID $id deleted successfully");
+			//error_log("Entry with ID $id deleted successfully");
 		} catch (Exception $e) {
 			// Log error
-			error_log("Error deleting entry: {$e->getMessage()}");
+			//error_log("Error deleting entry: {$e->getMessage()}");
 			// Handle error gracefully, e.g., display user-friendly message
 		}
 
@@ -242,8 +242,8 @@ class Adas_Divi_Public
 
 		// Parse the serialized form data
 		parse_str($form_data, $fields);
-		////error_log('$fields222222: ' . print_r($fields, true));
-		////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+		//////error_log('$fields222222: ' . print_r($fields, true));
+		//////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 
 		if (!$id) {
@@ -281,9 +281,8 @@ class Adas_Divi_Public
 
 
 
-
 	/** me:
-	 * Adds a new post to the lwp_form_submission CPT when a Divi form is submitted
+	 *Save entry when a Divi form is submitted
 	 *
 	 * @param array $processed_fields_values	Processed fields values
 	 * @param array $et_contact_error	 		Whether there is an error on the form entry submit process or not
@@ -292,15 +291,19 @@ class Adas_Divi_Public
 	function add_new_post($processed_fields_values, $et_contact_error, $contact_form_info)
 	{
 
+
+
+
+
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'divi_table';
 
 		if ($et_contact_error == true) {
 			return;
 		}
-		////error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
-		////error_log('ET Contact Error: ' . print_r($et_contact_error, true));
-		////error_log('Contact Form Info: ' . print_r($contact_form_info, true));
+		//////error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
+		//////error_log('ET Contact Error: ' . print_r($et_contact_error, true));
+		//////error_log('Contact Form Info: ' . print_r($contact_form_info, true));
 
 		// Serialize the array data
 		$form_values = serialize($processed_fields_values);
@@ -340,6 +343,7 @@ class Adas_Divi_Public
 				'%s' // Data format
 			)
 		);
+
 
 	}
 
@@ -388,33 +392,33 @@ class Adas_Divi_Public
 
 
 	/* AJAX callback function to fetch user names
-																	  function tag_user_get_user_names()
-																	  {
-																		  $args = array('orderby' => 'display_name');
-																		  $wp_user_query = new WP_User_Query($args);
-																		  $authors = $wp_user_query->get_results();
-																		  $user_emails = array();
+																							  function tag_user_get_user_names()
+																							  {
+																								  $args = array('orderby' => 'display_name');
+																								  $wp_user_query = new WP_User_Query($args);
+																								  $authors = $wp_user_query->get_results();
+																								  $user_emails = array();
 
-																		  if (!empty($authors)) {
+																								  if (!empty($authors)) {
 
-																			  foreach ($authors as $author) {
-																				  $author_info = get_userdata($author->ID);
-																				  $user_emails[] = $author_info->user_email;
-																				  //error_log('$user_emails: ' . print_r($user_emails, true));
-																				  //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																			  }
-																			  //error_log('user_emails: ' . print_r($user_emails, true));
-																			  //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																			  wp_send_json_success($user_emails);
-																		  } else {
-																			  wp_send_json_error('No results');
-																		  }
-
-
+																									  foreach ($authors as $author) {
+																										  $author_info = get_userdata($author->ID);
+																										  $user_emails[] = $author_info->user_email;
+																										  ////error_log('$user_emails: ' . print_r($user_emails, true));
+																										  ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																									  }
+																									  ////error_log('user_emails: ' . print_r($user_emails, true));
+																									  ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																									  wp_send_json_success($user_emails);
+																								  } else {
+																									  wp_send_json_error('No results');
+																								  }
 
 
 
-																	  }*/
+
+
+																							  }*/
 
 
 	/**

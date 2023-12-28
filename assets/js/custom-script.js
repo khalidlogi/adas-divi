@@ -71,7 +71,6 @@ jQuery(document).ready(function ($) {
   });
 
   $(".edit-btn, .editbtn").on("click", function () {
-    alert("kk");
     var form_id = $(this).data("form-id");
     var id = $(this).data("id");
     console.log("Form ID:", form_id);

@@ -175,14 +175,14 @@ class Adas_Divi_Settings
          */
         add_settings_section(
             'cliowp_settings_page_section1',
-            __('<span class="label_setting label-primary">Database settings', 'adasdividb'),
+            __('<span class="label_setting label-primary">Database settings ', 'adasdividb'),
             null,
             $this->menu_slug
         );
 
         add_settings_section(
             'cliowp_settings_page_section2',
-            __('<span class="label_setting label-primary">Telegrem notifications', 'adasdividb'),
+            __('<span class="label_setting label-primary">Appearnces', 'adasdividb'),
             null,
             $this->menu_slug
         );
@@ -243,24 +243,6 @@ class Adas_Divi_Settings
          */
 
 
-        // Telegram notification Enable/Disable Checkbox field -----------------------------------------------------.
-        add_settings_field(
-            'Enable_notification_checkbox',
-            __('<span class="label_setting">Enable/Disable Telegram notifications', 'adasdividb'),
-            array($this, 'checkbox2_html'),
-            $this->menu_slug,
-            'cliowp_settings_page_section2'
-        );
-
-        register_setting(
-            $this->option_group,
-            'Enable_notification_checkbox',
-            array(
-                'sanitize_callback' => 'sanitize_text_field',
-                'default' => '0',
-            )
-        );
-
         // MultiSelect field --------------------------------------------------.
         add_settings_field(
             'divi_form_id_setting',
@@ -289,46 +271,7 @@ class Adas_Divi_Settings
             'number_id_setting',
         );
 
-        //Telegram token field
-        add_settings_field(
-            'telegram_token_setting',
-            __('<span class="label_setting">Token  <i class="fas fa-info-circle" data-toggle="tooltip" 
-            title="To obtain a bot token, you can reach out to the @BotFather bot on Telegram. 
-            Simply send the command /newbot and follow the instructions provided."></i></span>', 'adasdividb'),
-            array($this, 'input_token_html'),
-            $this->menu_slug,
-            'cliowp_settings_page_section2'
-        );
-        register_setting(
-            $this->option_group,
-            'telegram_token_setting',
-            array(
-                'sanitize_callback' => array($this, 'sanitize_input1'),
-                'default' => 'enter token',
-            )
-        );
 
-        //Telegram Chat_id field
-        add_settings_field(
-            'telegram_chat_id_setting',
-            __('<span class="label_setting">Chat ID <i class="fas fa-info-circle" data-toggle="tooltip" title="
-            To obtain the chat ID for sending messages, you can contact out to the @myidbot bot on Telegram. 
-            Simply send the /getid command to get your personal chat ID. If you want to retrieve the group chat ID, 
-            invite the bot to the group and use the /getgroupid command. Group IDs typically begin with a hyphen, 
-            while supergroup IDs start with -100."
-            ></i>', 'adasdividb'),
-            array($this, 'input_chatid_html'),
-            $this->menu_slug,
-            'cliowp_settings_page_section2'
-        );
-        register_setting(
-            $this->option_group,
-            'telegram_chat_id_setting',
-            array(
-                'sanitize_callback' => array($this, 'sanitize_input1'),
-                'default' => 'enter Chat_id',
-            )
-        );
 
 
         // Checkbox field -----------------------------------------------------.
@@ -550,6 +493,7 @@ class Adas_Divi_Settings
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'divi_table';
+        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
 
         $form_id = get_option('divi_form_id_setting');
@@ -557,12 +501,9 @@ class Adas_Divi_Settings
         if (empty($results_formids)) {
             printf(__('It appears that there are no form entries detected. Please add a form using the divi plugin and submit at least one form.'));
 
-            if (is_plugin_inactive('wpforms-lite/wpforms.php')) {
+            if ($is_divi_active) {
                 // The plugin is not activated
-                printf(' <br>Activate wpforms-lite plugin and try again');
-            } else {
-                printf(' <br><a href="%s">Visit your WPForms forms</a>.', admin_url('admin.php?page=wpforms-overview'));
-
+                printf(' <br>DIVI THEME IS NOT ACTIVE!!');
             }
         } else {
             echo '<div class="form-field">';
@@ -679,9 +620,16 @@ class Adas_Divi_Settings
     public function multiselect1_html()
     {
         global $wpdb;
+        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+
         $table_name = $wpdb->prefix . 'divi_table';
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
-        ////error_log(print_r($results_formids, true));
+        //////error_log(print_r($results_formids, true));
+
+        if (!$is_divi_active) {
+            // The plugin is not activated
+            printf(' <h1 class="warning-text">DIVI Theme is not active!</h1>');
+        }
 
         if (count($results_formids) > 0) {
             $selected_values = get_option('divi_form_id_setting');
@@ -698,7 +646,7 @@ class Adas_Divi_Settings
             <select name="divi_form_id_setting[]" multiple>
                 <?php
                 foreach ($results_formids as $form_id) {
-                    ////error_log(print_r($form_id, true));
+                    //////error_log(print_r($form_id, true));
                     $option_value = esc_attr($form_id->contact_form_id);
                     // $selected = in_array($option_value, $selected_values) ? 'selected' : '';
                     echo "<option value='" . esc_html($option_value) . "' " . esc_html($this->cliowp_multiselected($selected_values, $option_value)) . ">

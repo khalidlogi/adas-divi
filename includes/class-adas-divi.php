@@ -69,6 +69,9 @@ class Adas_Divi
 	 */
 	public function __construct()
 	{
+
+
+
 		if (defined('ADAS_DIVI_VERSION')) {
 			$this->version = ADAS_DIVI_VERSION;
 		} else {
@@ -104,9 +107,9 @@ class Adas_Divi
 		}
 
 		/* Plugin Folder URL.
-																							if (!defined('WPFORMS_PLUGIN_URL')) {
-																								define('KHFORM_URL', plugin_dir_url(__FILE__));
-																							}*/
+																																if (!defined('WPFORMS_PLUGIN_URL')) {
+																																	define('KHFORM_URL', plugin_dir_url(__FILE__));
+																																}*/
 	}
 
 
@@ -224,8 +227,12 @@ class Adas_Divi
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
-		// me : Constructor function that registers the Divi contact form hook
-		$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
+		// Activate if enabled
+		$isdataenabled = get_option('Enable_data_saving_checkbox');
+
+		if (!empty($isdataenabled)) {
+			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
+		}
 
 		$this->loader->add_action('wp_ajax_get_form_values', $plugin_public, 'get_form_values');
 		$this->loader->add_action('wp_ajax_nopriv_get_form_values', $plugin_public, 'get_form_values');
@@ -239,6 +246,10 @@ class Adas_Divi
 
 		$this->loader->add_action('wp_ajax_update_send_email', $plugin_public, 'send_email');
 		$this->loader->add_action('wp_ajax_nopriv_send_email', $plugin_public, 'send_email');
+
+		//Redirect to thank you page
+		//$this->loader->add_action('template_redirect', $plugin_public, 'template_redirect');
+
 
 
 

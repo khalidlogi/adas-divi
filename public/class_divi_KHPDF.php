@@ -120,7 +120,7 @@ if (!class_exists('class_divi_KHPDF')) {
                          }
 
                          
-                        ////error_log(print_r($data, true));
+                        //////error_log(print_r($data, true));
                         $id = $form_value['id'];
                         $value = 'test';
                         $html_table .= '<tr style="background: ' . $background_color . '; border-bottom: 1px solid #ccc;">';
@@ -185,11 +185,11 @@ if (!class_exists('class_divi_KHPDF')) {
 
 
                     foreach ($data as $key => $value) {
-                        //error_log(print_r($data, true));
+                        ////error_log(print_r($data, true));
                         $id = $form_value['id'];
                         $value = empty($value) ? "----" : $value;
-                        error_log('$date: ' . print_r($date, true));
-                        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+                        //error_log('$date: ' . print_r($date, true));
+                        //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                         $html_table .= '<tr style="background: ' . $background_color . '; border-bottom: 1px solid #ccc;">';
                         $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:Charcoal;">' . $id . '</td>';

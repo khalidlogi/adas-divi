@@ -120,7 +120,7 @@ if (!class_exists('KHPDF')) {
                          }
 
                          
-                        ////error_log(print_r($data, true));
+                        //////error_log(print_r($data, true));
                         $id = $form_value['id'];
                         $value = 'test';
                         $html_table .= '<tr style="background: ' . $background_color . '; border-bottom: 1px solid #ccc;">';

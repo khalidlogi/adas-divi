@@ -34,8 +34,9 @@ class Adas_Divi_Shortcode
         $this->exportbgcolor = get_option('khdivi_exportbg_color') ?: '#408c4f';
         $this->isnotif = get_option('Enable_notification_checkbox') ?: '0';
         //$this->items_per_page = get_option('number_id_setting') ?: 10;
-        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
+//        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
 
+        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
         $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
         //error_log('$this->formbyid: ffffffff ' . ($this->formbyid));
         //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
@@ -100,7 +101,11 @@ class Adas_Divi_Shortcode
         //error_log('display_form_values_shortcode_table called');
 
         global $wpdb;
-        $is_wpforms_active = true;
+        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+        error_log('$is_wpforms_active: ' . print_r($is_divi_active, true));
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+
+
 
         $atts = shortcode_atts(
             array(
@@ -111,6 +116,8 @@ class Adas_Divi_Shortcode
 
         $current_page = max(1, get_query_var('paged'));
         $offset = ($current_page - 1) * $this->items_per_page;
+        error_log('$offset: ' . print_r($offset, true));
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
         //$totalCount = KHdb::getInstance()->count_items();
         //if ($this->formCount != 0 && $this->items_per_page != 0) {
 
@@ -142,6 +149,8 @@ class Adas_Divi_Shortcode
             // retrieve form values
             //$form_values = KHdb::getInstance()->retrieve_form_values($formbyid, $offset);
             $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($this->formbyid, $offset, $this->items_per_page, '');
+            error_log('$form_values: from shortcoe' . print_r($form_values, true));
+            error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 
 
@@ -162,8 +171,8 @@ class Adas_Divi_Shortcode
                 include_once KHFORM_PATH . '../Inc/html/edit_popup.php';
                 echo '<br>
                 <div class="form-wraper">';
-                if (!$is_wpforms_active) {
-                    echo '<div style="color:red;"><i class="fas fa-exclamation-circle"></i> Wpforms is not ACTIVE</div>';
+                if (!$is_divi_active) {
+                    echo '<div style="color:red;"><i class="fas fa-exclamation-circle"></i> Divi Theme is not ACTIVE</div>';
                 }
                 echo '
                     Visit the <a href="' . admin_url('options-general.php?page=khdiviwplist.php') .
