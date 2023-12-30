@@ -11,8 +11,6 @@ if (!class_exists('class_divi_KHPDF')) {
         protected $myselectedformid;
         protected $mydb;
 
-        public $text_color;
-
         /**
          * Construct method
          */
@@ -48,50 +46,14 @@ if (!class_exists('class_divi_KHPDF')) {
             global $wpdb;
             $this->myselectedformid = class_divi_KHdb::getInstance()->retrieve_form_id();
 
-
-            // Create an instance of KHdb
-            //$khdb = new KHdb();
-
             try {
                 $dompdf = new Dompdf();
-                // Set the HTML content
-                // $html = '<html><body><h1>Hello, World!</h1></body></html>';
-                //$dompdf->loadHtml($html);
-
-                // Render the HTML as PDF
-                //$dompdf->render();
-
-                // Output the generated PDF
-                // $dompdf->stream('hello_world.pdf');
-
-
-                //$this->myselectedformid = (get_option('form_id_setting')) ? get_option('form_id_setting') : '';
-
-                //$datecsv = class_divi_KHdb::getInstance()->getDate();
 
                 $formbyid = $this->myselectedformid;
 
                 $form_values = class_divi_KHdb::getInstance()->retrieve_form_values_pdf($formbyid);
                 error_log('$form_values: pdf' . print_r($form_values, true));
                 error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-
-                /* Start building the HTML table
-
-                $html_table = ' ';
-                $html_table .= '<table style="margin-bottom:1px; width:100%; border-collapse:collapse; border:1px solid #ccc; font-family: Arial, sans-serif; font-size: 14px;">';
-                $html_table .= '<thead style=" background-color: #007acc;color: #fff;font-weight: bold;">
-    
-            <tr>
-                    <th >ID</th>
-                    <th >Form ID</th>
-                    <th >Field</th>
-                    <th >Value</th>
-                </tr>
-            </thead>';
-                $html_table .= '<tbody>';
-
-                $isOddRow = false; // Initialize as false
 
                 foreach ($form_values as $form_value) {
 
@@ -109,28 +71,8 @@ if (!class_exists('class_divi_KHPDF')) {
                             continue;
                         }
 
-                        /* if (is_array($value)) {
-                             if (array_key_exists('value', $value)) {
-                                 $value = $this->display_value($value['value'], $key);
-                             } else {
-                                 foreach ($value as $val) {
-                                     $value = $this->display_value($val, $key);
-                                 }
-                             }
-                         } else {
-                             $value = $this->display_value($value, $key);
-                         }
 
-                         
-                        //////error_log(print_r($data, true));
-                        $id = $form_value['id'];
-                        $value = 'test';
-                        $html_table .= '<tr style="background: ' . $background_color . '; border-bottom: 1px solid #ccc;">';
-                        $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:Charcoal;">' . $id . '</td>';
-                        $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:blue;">' . $form_id . '</td>';
-                        $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:blue;">' . $key . '</td>';
 
-                       
                         //} else {
                         $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:blue;">' . $value . '</td>';
                         //}
@@ -139,22 +81,13 @@ if (!class_exists('class_divi_KHPDF')) {
                     }
                 }
 
-                $html_table .= '</tbody></table>'; */
-
-
-                //echo $html_table;
-
-
-
-
+                $html_table .= '</tbody></table>';
                 // Create new TCPDF instance
                 $dompdf = new Dompdf();
 
 
 
                 // Generate the HTML table
-
-
                 $html_table = ' ';
                 $html_table .= '<table style="margin-bottom:1px; width:100%; border-collapse:collapse; border:1px solid #ccc; font-family: Arial, sans-serif; font-size: 14px;">';
                 $html_table .= '<thead style=" background-color: #007acc;color: #fff;font-weight: bold;">
@@ -171,8 +104,6 @@ if (!class_exists('class_divi_KHPDF')) {
                 $isOddRow = false; // Initialize as false
 
                 foreach ($form_values as $form_value) {
-                    //error_log('$form_values data: ' . print_r($form_value['data'], true));
-                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                     $form_id = ($form_value['contact_form_id']);
                     $id = intval($form_value['id']);
@@ -183,11 +114,6 @@ if (!class_exists('class_divi_KHPDF')) {
                     // Define the CSS class for the row based on $isOddRow
                     $rowClass = $isOddRow ? 'odd-row' : '';
                     $background_color = $isOddRow ? ' #f2f2f2' : 'white';
-
-                    //$html_table .= "$date ";
-
-
-
 
                     foreach ($form_value['data'] as $key => $value) {
                         ////error_log(print_r($data, true));
@@ -200,8 +126,6 @@ if (!class_exists('class_divi_KHPDF')) {
                         }
 
                         $value = empty($value) ? "----" : $value;
-                        //error_log('$date: ' . print_r($date, true));
-                        //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                         $html_table .= '<tr style="background: ' . $background_color . '; border-bottom: 1px solid #ccc;">';
                         $html_table .= '<td style="padding:10px; border-bottom:1px solid #ccc; color:Charcoal;">' . $id . '</td>';
@@ -233,8 +157,6 @@ if (!class_exists('class_divi_KHPDF')) {
                 // Output the generated PDF to Browser
                 //$dompdf->stream();
                 $dompdf->stream('filename.pdf', array("Attachment" => 0));
-
-                wp_die(); //Terminate
                 wp_die(); //Terminate
             } catch (Exception $e) {
                 // Handle exceptions.

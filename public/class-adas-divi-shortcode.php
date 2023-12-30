@@ -24,13 +24,13 @@ class Adas_Divi_Shortcode
     {
 
         global $wpdb;
-        $this->table_name = $wpdb->prefix . 'divi_table';
+        $this->table_name = 'divi_table';
         $this->view_options = get_option('view_option') ?: 'normal';
         $this->label_color = get_option('khdivi_label_color') ?: '#bfa1a1';
         error_log('$this->label_color: ' . print_r($this->label_color, true));
         error_log('in ' . __FILE__ . ' on line ' . __LINE__);
         $this->text_color = get_option('khdivi_text_color');
-        $this->bgcolor = get_option('khdivi_bg_color') ?: '#408c4f';
+        $this->bgcolor = get_option('khdivi_bg_color') ?: '#c4c0c0';
         $this->exportbgcolor = get_option('khdivi_exportbg_color') ?: '#408c4f';
         $this->isnotif = get_option('Enable_notification_checkbox') ?: '0';
         //$this->items_per_page = get_option('number_id_setting') ?: 10;
@@ -159,7 +159,7 @@ class Adas_Divi_Shortcode
                 ob_start();
 
                 echo '<div style="text-align: center; color: red;">No data available! Please add entries to your form and try again.';
-                echo ' <a style="text-align: center; color: black;" href="' . admin_url('admin.php?page=khwplist.php') . '">Settings
+                echo ' <a style="text-align: center; color: black;" href="' . admin_url('admin.php?page=khdiviwplist.php') . '">Settings
                 DB</a></div>';
 
                 return ob_get_clean();

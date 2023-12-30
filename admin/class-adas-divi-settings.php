@@ -292,7 +292,7 @@ class Adas_Divi_Settings
             )
         );
 
-        // view 
+        /* view 
         add_settings_field(
             'view_option',
             __('<span class="label_setting">View Option', 'adasdividb'),
@@ -306,7 +306,7 @@ class Adas_Divi_Settings
             array(
                 'default' => 'normal',
             )
-        );
+        );*/
 
 
 
@@ -492,7 +492,7 @@ class Adas_Divi_Settings
     function number1_html()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'divi_table';
+        $table_name = 'divi_table';
         $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
 
@@ -658,7 +658,7 @@ class Adas_Divi_Settings
         <?php } else {
 
             /* translators: %s: PHP version */
-            $message = sprintf(esc_html__('Currently, no data has been submitted. Kindly submit at least one form.'));
+            $message = sprintf(esc_html__('Currently, no data has been submitted. Kindly submit at least one form using Divi Contact Form.'));
             $html_message = sprintf('<div class="warning-text">%s</div>', wpautop($message));
             echo wp_kses_post($html_message);
 

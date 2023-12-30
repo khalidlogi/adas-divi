@@ -292,13 +292,15 @@ class Adas_Divi_Public
 	{
 
 
-
+		error_log('add_new_post active in ' . __FILE__ . ' on line ' . __LINE__);
 
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'divi_table';
 
-		if ($et_contact_error == true) {
+		if ($et_contact_error === true) {
+			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
+
 			return;
 		}
 		//////error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
@@ -392,33 +394,33 @@ class Adas_Divi_Public
 
 
 	/* AJAX callback function to fetch user names
-																							  function tag_user_get_user_names()
-																							  {
-																								  $args = array('orderby' => 'display_name');
-																								  $wp_user_query = new WP_User_Query($args);
-																								  $authors = $wp_user_query->get_results();
-																								  $user_emails = array();
+																									   function tag_user_get_user_names()
+																									   {
+																										   $args = array('orderby' => 'display_name');
+																										   $wp_user_query = new WP_User_Query($args);
+																										   $authors = $wp_user_query->get_results();
+																										   $user_emails = array();
 
-																								  if (!empty($authors)) {
+																										   if (!empty($authors)) {
 
-																									  foreach ($authors as $author) {
-																										  $author_info = get_userdata($author->ID);
-																										  $user_emails[] = $author_info->user_email;
-																										  ////error_log('$user_emails: ' . print_r($user_emails, true));
-																										  ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																									  }
-																									  ////error_log('user_emails: ' . print_r($user_emails, true));
-																									  ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																									  wp_send_json_success($user_emails);
-																								  } else {
-																									  wp_send_json_error('No results');
-																								  }
-
-
+																											   foreach ($authors as $author) {
+																												   $author_info = get_userdata($author->ID);
+																												   $user_emails[] = $author_info->user_email;
+																												   ////error_log('$user_emails: ' . print_r($user_emails, true));
+																												   ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																											   }
+																											   ////error_log('user_emails: ' . print_r($user_emails, true));
+																											   ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+																											   wp_send_json_success($user_emails);
+																										   } else {
+																											   wp_send_json_error('No results');
+																										   }
 
 
 
-																							  }*/
+
+
+																									   }*/
 
 
 	/**

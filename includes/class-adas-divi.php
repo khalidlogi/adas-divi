@@ -107,9 +107,9 @@ class Adas_Divi
 		}
 
 		/* Plugin Folder URL.
-																																if (!defined('WPFORMS_PLUGIN_URL')) {
-																																	define('KHFORM_URL', plugin_dir_url(__FILE__));
-																																}*/
+																																						if (!defined('WPFORMS_PLUGIN_URL')) {
+																																							define('KHFORM_URL', plugin_dir_url(__FILE__));
+																																						}*/
 	}
 
 
@@ -156,6 +156,9 @@ class Adas_Divi
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-public.php';
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-shortcode.php';
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-logs.php';
+
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHdb.php';
 
@@ -230,8 +233,16 @@ class Adas_Divi
 		// Activate if enabled
 		$isdataenabled = get_option('Enable_data_saving_checkbox');
 
-		if (!empty($isdataenabled)) {
+
+		//if (!empty($isdataenabled)) {
+		//}
+		if (has_action('et_pb_contact_form_submit')) {
+			// The hook 'et_pb_contact_form_submit' exists
 			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
+			error_log("The hook 'et_pb_contact_form_submit' exists.");
+		} else {
+			// The hook 'et_pb_contact_form_submit' does not exist
+			error_log("The hook 'et_pb_contact_form_submit' does not exist.");
 		}
 
 		$this->loader->add_action('wp_ajax_get_form_values', $plugin_public, 'get_form_values');
@@ -263,6 +274,8 @@ class Adas_Divi
 
 		// Insitantiate shortcode Class
 		new Adas_Divi_Shortcode();
+		new Adas_Divi_Logs();
+
 
 	}
 

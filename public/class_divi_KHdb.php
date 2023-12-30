@@ -16,6 +16,8 @@ class class_divi_KHdb
     {
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'divi_table';
+        error_log(' $wpdb->prefix: ' . print_r($wpdb->prefix, true));
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
         $this->formid = $this->retrieve_form_id();
         $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
@@ -31,11 +33,10 @@ class class_divi_KHdb
     {
         global $wpdb;
 
-        $table_name = $wpdb->prefix . $this->table_name;
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") == $this->table_name) {
             // The table exists, let's drop it
-            $sql = "DROP TABLE $table_name;";
+            $sql = "DROP TABLE $this->table_name;";
 
             if ($wpdb->query($sql) !== false) {
                 // Table dropped successfully
@@ -70,22 +71,22 @@ class class_divi_KHdb
      */
     public function create_tabledb()
     {
-        /*
-         global $wpdb;
 
-         $charset_collate = $wpdb->get_charset_collate();
+        /*global $wpdb;
 
-         $sql = "CREATE TABLE IF NOT EXISTS " . $this->table_name . " (
-                 id bigint(20) NOT NULL AUTO_INCREMENT,
-                 form_id INT(11) NOT NULL,
-                 date_submitted DATETIME NOT NULL,
-                 form_value LONGTEXT NOT NULL,
-                 PRIMARY KEY (id)
-             ) $charset_collate;";
+        $charset_collate = $wpdb->get_charset_collate();
 
-         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-         dbDelta($sql);
-         */
+        $sql = "CREATE TABLE IF NOT EXISTS " . $this->table_name . " (
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                form_id INT(11) NOT NULL,
+                date_submitted DATETIME NOT NULL,
+                form_value LONGTEXT NOT NULL,
+                PRIMARY KEY (id)
+            ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);*/
+
     }
 
     function delete_data($id)

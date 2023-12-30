@@ -32,13 +32,10 @@ class Adas_Divi_Activator
 	 */
 	public static function activate()
 	{
-		// Hook into plugin activation
-		register_activation_hook(__FILE__, 'create_divi_table');
-
 		global $wpdb;
 
 		// Table name
-		$table_name = $wpdb->prefix . 'DIVI_TABLE';
+		$table_name = $wpdb->prefix . 'divi_table';
 
 		// SQL query to create the table
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
@@ -56,7 +53,10 @@ class Adas_Divi_Activator
 		// Execute the query
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
+
 	}
+	
+	
 
 
 
