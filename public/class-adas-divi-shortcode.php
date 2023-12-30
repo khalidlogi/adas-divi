@@ -19,24 +19,34 @@ class Adas_Divi_Shortcode
 
     private $formCount;
 
+    private $option;
+
 
     public function __construct()
     {
 
         global $wpdb;
         $this->table_name = 'divi_table';
-        $this->view_options = get_option('view_option') ?: 'normal';
-        $this->label_color = get_option('khdivi_label_color') ?: '#bfa1a1';
-        error_log('$this->label_color: ' . print_r($this->label_color, true));
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-        $this->text_color = get_option('khdivi_text_color');
-        $this->bgcolor = get_option('khdivi_bg_color') ?: '#c4c0c0';
-        $this->exportbgcolor = get_option('khdivi_exportbg_color') ?: '#408c4f';
         $this->isnotif = get_option('Enable_notification_checkbox') ?: '0';
+
         //$this->items_per_page = get_option('number_id_setting') ?: 10;
 //        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
 
-        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
+        $options = [
+            'khdivi_label_color' => '#bfa1a1',
+            'khdivi_text_color' => null,
+            'khdivi_exportbg_color' => '#408c4f',
+            'khdivi_bg_color' => '#f8f7f7',
+            'khdivi_exportbg_color' => '#408c4f',
+            'Enable_notification_checkbox' => '0',
+            'items_per_page' => 10,
+        ];
+
+        foreach ($options as $option => $default) {
+            $value = get_option($option, $default);
+            $this->{$option} = $value;
+        }
+
         $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
         //error_log('$this->formbyid: ffffffff ' . ($this->formbyid));
         //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
@@ -92,7 +102,7 @@ class Adas_Divi_Shortcode
         } elseif (is_numeric($value)) {
             echo '<a href="https://wa.me/' . $value . '">' . $value . '</a>';
         } else {
-            echo '<span style="color:' . $this->text_color . ';" class="value">' . esc_html($value) . '</span>';
+            echo '<span style="color:' . $this->khdivi_text_color . ';" class="value">' . esc_html($value) . '</span>';
         }
 
     }
@@ -189,7 +199,7 @@ class Adas_Divi_Shortcode
                 }
                 // Start table
                 echo '<div class="form-data-container">';
-                echo '<table style="border: 1px solid black; background:' . $this->bgcolor . ';>';
+                echo '<table style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
 
                 // Table header
                 echo '<tr>';
@@ -212,7 +222,7 @@ class Adas_Divi_Shortcode
                     echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
                     echo '<td width="80%" style="border: 1px solid black;">';
 
-                    echo '<span style="color:' . $this->label_color . ';">Date:</span> <span style="color:' . $this->text_color . ';">' . $date . ' </span>';
+                    echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
 
 
                     // Table data
@@ -288,8 +298,8 @@ class Adas_Divi_Shortcode
                 );
                 echo '</div>';
 
-                echo '<button style="background:' . $this->exportbgcolor . ';" class="export-btn"><i class="fas fa-download"></i> Export as CSV</button>';
-                echo '<button style="background:' . $this->exportbgcolor . ';" class="export-btn-pdf"><i class="fas fa-download"></i> Export as PDF</button>';
+                echo '<button style="background:' . $this->khdivi_exportbg_color . ';" class="export-btn"><i class="fas fa-download"></i> Export as CSV</button>';
+                echo '<button style="background:' . $this->khdivi_exportbg_color . ';" class="export-btn-pdf"><i class="fas fa-download"></i> Export as PDF</button>';
                 echo '</div>';
 
                 return ob_get_clean();

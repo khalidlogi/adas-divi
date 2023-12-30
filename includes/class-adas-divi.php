@@ -107,9 +107,9 @@ class Adas_Divi
 		}
 
 		/* Plugin Folder URL.
-																																						if (!defined('WPFORMS_PLUGIN_URL')) {
-																																							define('KHFORM_URL', plugin_dir_url(__FILE__));
-																																						}*/
+																																							  if (!defined('WPFORMS_PLUGIN_URL')) {
+																																								  define('KHFORM_URL', plugin_dir_url(__FILE__));
+																																							  }*/
 	}
 
 
@@ -236,14 +236,14 @@ class Adas_Divi
 
 		//if (!empty($isdataenabled)) {
 		//}
-		if (has_action('et_pb_contact_form_submit')) {
-			// The hook 'et_pb_contact_form_submit' exists
-			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
-			error_log("The hook 'et_pb_contact_form_submit' exists.");
-		} else {
-			// The hook 'et_pb_contact_form_submit' does not exist
-			error_log("The hook 'et_pb_contact_form_submit' does not exist.");
-		}
+		//if (has_action('et_pb_contact_form_submit')) {
+		// The hook 'et_pb_contact_form_submit' exists
+		$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
+		error_log("The hook 'et_pb_contact_form_submit' exists.");
+		//} else {
+		// The hook 'et_pb_contact_form_submit' does not exist
+		error_log("The hook 'et_pb_contact_form_submit' does not exist.");
+		//}
 
 		$this->loader->add_action('wp_ajax_get_form_values', $plugin_public, 'get_form_values');
 		$this->loader->add_action('wp_ajax_nopriv_get_form_values', $plugin_public, 'get_form_values');

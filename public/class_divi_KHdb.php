@@ -20,7 +20,7 @@ class class_divi_KHdb
         error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
         $this->formid = $this->retrieve_form_id();
-        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
+        $this->items_per_page = get_option('items_per_page') ? get_option('items_per_page') : 10;
         //$this->count_items();
     }
 

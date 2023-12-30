@@ -259,7 +259,7 @@ class Adas_Divi_Settings
 
         // Number of entries in page --------------------------------------------------.
         add_settings_field(
-            'number_id_setting',
+            'items_per_page',
             __('<span class="label_setting">Number of entries per Page', 'adasdividb'),
             array($this, 'number_page_html'),
             $this->menu_slug,
@@ -268,7 +268,7 @@ class Adas_Divi_Settings
 
         register_setting(
             $this->option_group,
-            'number_id_setting',
+            'items_per_page',
         );
 
 
@@ -607,9 +607,9 @@ class Adas_Divi_Settings
     public function number_page_html()
     {
 
-        $numberperpage = get_option('number_id_setting');
+        $numberperpage = get_option('items_per_page');
 
-        echo '<input class="form-control " type="text" name="number_id_setting" value="' . esc_attr($numberperpage) . '" />';
+        echo '<input class="form-control " type="text" name="items_per_page" value="' . esc_attr($numberperpage) . '" />';
     }
 
 
