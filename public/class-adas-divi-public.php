@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * 
  * The public-facing functionality of the plugin.
  *
  * @link       https://web-pro.store
@@ -22,6 +23,9 @@
  */
 class Adas_Divi_Public
 {
+
+	
+	private $table_name;
 
 	/**
 	 * The ID of this plugin.
@@ -51,6 +55,8 @@ class Adas_Divi_Public
 	public function __construct($plugin_name, $version)
 	{
 
+		global $wpdb;
+		$this->table_name = $wpdb->prefix . 'divi_table';
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
@@ -65,15 +71,11 @@ class Adas_Divi_Public
 	function get_form_values()
 	{
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'divi_table';
-
-
-
 		$form_id = ($_POST['form_id']);
 		$id = intval($_POST['id']);
 
 		// Fetch form_value from the wpform_db2 table based on the form_id
-		$query = $wpdb->prepare("SELECT id, form_values FROM $table_name WHERE id = %d", $id);
+		$query = $wpdb->prepare("SELECT id, form_values FROM $this->table_name WHERE id = %d", $id);
 		$serialized_data = $wpdb->get_results($query);
 
 		if ($wpdb->last_error) {
@@ -100,7 +102,6 @@ class Adas_Divi_Public
 					'value' => $newvalue,
 				);
 			}
-
 			wp_send_json_success(array('fields' => $fields));
 		} else {
 			wp_send_json_error('Form values not found for the given form_id.');
@@ -117,8 +118,6 @@ class Adas_Divi_Public
 	function delete_form_row()
 	{
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'divi_table';
-
 		//error_log('function delete_form_row() ');
 		$id = intval($_POST['id']);
 
@@ -144,7 +143,7 @@ class Adas_Divi_Public
 			// Prepared statement for security
 			$wpdb->query(
 				$wpdb->prepare(
-					"DELETE FROM {$table_name} WHERE id = %d",
+					"DELETE FROM {$this->table_name} WHERE id = %d",
 					$id
 				)
 			);
@@ -161,67 +160,6 @@ class Adas_Divi_Public
 
 		exit;
 	}
-	/**
-	 * delete form row by its id
-	 */
-	function delete_form_row2()
-	{
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'divi_table';
-
-
-		$id = intval($_POST['id']);
-		//error_log('function delete_form_row() is is ' . print_r($id, true));
-		//error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-		if (!$id) {
-			wp_send_json_error('Invalid ID');
-			exit;
-		}
-
-		// Check permissions
-		if (!current_user_can('delete_posts')) {
-			wp_send_json_error('Insufficient permissions');
-			exit;
-		}
-
-		// Check for nonce security      
-		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
-			die('Busted!');
-		}
-
-
-		try {
-			// Prepared statement for security
-			$wpdb->prepare(
-				"DELETE FROM {$table_name} WHERE id = %d",
-				$id
-			);
-
-			// Execute deletion
-			$wpdb->query();
-
-			// Log success
-			//error_log("Entry with ID $id deleted successfully");
-		} catch (Exception $e) {
-			// Log error
-			//error_log("Error deleting entry: {$e->getMessage()}");
-			// Handle error gracefully, e.g., display user-friendly message
-		}
-
-
-
-		if (!$wpdb->delete()) {
-			wp_send_json_error('Error deleting');
-			exit;
-
-		}
-		wp_send_json_success('deleted successfully');
-		exit;
-
-	}
-
-
 
 
 	/**
@@ -233,7 +171,6 @@ class Adas_Divi_Public
 	{
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'divi_table';
 
 		// Retrieve the serialized form data from the AJAX request
 		$form_data = sanitize_text_field($_POST['formData']);
@@ -263,7 +200,7 @@ class Adas_Divi_Public
 		}
 
 		$status = $wpdb->update(
-			$table_name,
+			$this->table_name,
 			array('form_values' => serialize($fields)),
 			array('id' => $id)
 		);
@@ -281,7 +218,7 @@ class Adas_Divi_Public
 
 
 
-	/** me:
+	/**
 	 *Save entry when a Divi form is submitted
 	 *
 	 * @param array $processed_fields_values	Processed fields values
@@ -296,8 +233,6 @@ class Adas_Divi_Public
 
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'divi_table';
-
 		if ($et_contact_error === true) {
 			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
 
@@ -323,7 +258,7 @@ class Adas_Divi_Public
 
 		// Insert the serialized data into the database
 		$wpdb->insert(
-			$table_name,
+			$this->table_name,
 			array(
 				'form_values' => $form_values,
 				'page_id' => $page_id,
@@ -370,8 +305,7 @@ class Adas_Divi_Public
 		 */
 
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-public.css', array(), $this->version, 'all');
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-public.css', array(), $this->version, 'all');
-		//add_action('wp_enqueue_scripts', array($this, 'enqueue_form_values_css'));
+
 
 
 

@@ -3,22 +3,10 @@
 
 class Adas_Divi_Shortcode
 {
-
-    private $mydb;
-    private $view_options;
-    private $mysetts;
     private $table_name;
-
-    private $mylink;
-    private $text_color;
-    private $label_color;
-    private $bgcolor;
     private $formbyid;
-    private $exportbgcolor;
     private $items_per_page;
-
     private $formCount;
-
     private $option;
 
 
@@ -27,10 +15,6 @@ class Adas_Divi_Shortcode
 
         global $wpdb;
         $this->table_name = 'divi_table';
-        $this->isnotif = get_option('Enable_notification_checkbox') ?: '0';
-
-        //$this->items_per_page = get_option('number_id_setting') ?: 10;
-//        $this->items_per_page = get_option('number_id_setting') ? get_option('number_id_setting') : 10;
 
         $options = [
             'khdivi_label_color' => '#bfa1a1',
@@ -38,7 +22,6 @@ class Adas_Divi_Shortcode
             'khdivi_exportbg_color' => '#408c4f',
             'khdivi_bg_color' => '#f8f7f7',
             'khdivi_exportbg_color' => '#408c4f',
-            'Enable_notification_checkbox' => '0',
             'items_per_page' => 10,
         ];
 
@@ -47,14 +30,13 @@ class Adas_Divi_Shortcode
             $this->{$option} = $value;
         }
 
+        //get the form id 
         $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
-        //error_log('$this->formbyid: ffffffff ' . ($this->formbyid));
-        //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
+        error_log('$this->formbyid: ' . print_r($this->formbyid, true)); 
+        error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
 
+        // get the number of forms
         $this->formCount = class_divi_KHdb::getInstance()->count_items($this->formbyid);
-        //error_log(' $this->formCount: 111111 ' . ($this->formCount));
-        //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-        //$this->formCount = 10;
 
         add_action('init', [&$this, 'init']);
 
@@ -67,30 +49,6 @@ class Adas_Divi_Shortcode
 
     }
 
-    public function dividata($atts)
-    {
-
-        ob_start();
-        echo 'sssssssssssssss';
-        return ob_get_clean();
-
-    }
-
-    function generate_pagination($formCount, $items_per_page)
-    {
-
-
-        /*echo paginate_links(
-            array(
-                'base' => esc_url(add_query_arg('paged', '%#%')),
-                'format' => '',
-                'prev_text' => __('&laquo; Previous'),
-                'next_text' => __('Next &raquo;'),
-                'total' => $total_pages,
-                'current' => $current_page,
-            )
-        );*/
-    }
 
     function display_value($value, $key)
     {
@@ -108,14 +66,6 @@ class Adas_Divi_Shortcode
     }
     function display_form_values_shortcode_table($atts)
     {
-        //error_log('display_form_values_shortcode_table called');
-
-        global $wpdb;
-        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
-        error_log('$is_wpforms_active: ' . print_r($is_divi_active, true));
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-
 
         $atts = shortcode_atts(
             array(
@@ -123,25 +73,17 @@ class Adas_Divi_Shortcode
             ),
             $atts
         );
-
+        global $wpdb;
+        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
         $current_page = max(1, get_query_var('paged'));
         $offset = ($current_page - 1) * $this->items_per_page;
-        error_log('$offset: ' . print_r($offset, true));
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-        //$totalCount = KHdb::getInstance()->count_items();
-        //if ($this->formCount != 0 && $this->items_per_page != 0) {
-
         $total_pages = ceil($this->formCount / $this->items_per_page);
-        //}
-
+        
         // see if user do not have authorization 
         if (!current_user_can('manage_options')) {
-            // Assuming you have a link that takes users to the login page, you can add the referer URL as a query parameter.
 
             ob_start();
-
-            echo '<div style="text-align: center; color: red;">You are not authorized to access this page. <a href="' . wp_login_url(add_query_arg('redirect', 'wpfurl')) . '">Login</a></div>';                //echo 'login: ' . wp_login_url();
-
+            echo '<div style="text-align: center; color: red;">You are not authorized to access this page. <a href="' . wp_login_url(add_query_arg('redirect', 'wpfurl')) . '">Login</a></div>';
             return ob_get_clean();
 
         } else {
@@ -151,32 +93,22 @@ class Adas_Divi_Shortcode
                 $formbyid = $atts['id'];
             } else {
                 $formbyid = $this->formbyid;
-                //error_log('formbyid' . $formbyid);
-
             }
 
-            ////error_log('display the changed form id'.$formbyid);
-            // retrieve form values
-            //$form_values = KHdb::getInstance()->retrieve_form_values($formbyid, $offset);
+            //Retrieve data from db
             $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($this->formbyid, $offset, $this->items_per_page, '');
-            error_log('$form_values: from shortcoe' . print_r($form_values, true));
-            error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
-
+            //error_log('$form_values: from shortcoe' . print_r($form_values, true));
+            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
             //Check if there is at least one entry
             if (class_divi_KHdb::getInstance()->is_table_empty() === true) {
                 ob_start();
-
                 echo '<div style="text-align: center; color: red;">No data available! Please add entries to your form and try again.';
                 echo ' <a style="text-align: center; color: black;" href="' . admin_url('admin.php?page=khdiviwplist.php') . '">Settings
                 DB</a></div>';
-
                 return ob_get_clean();
-
             } else {
                 ob_start();
-
                 //include edit-form file
                 include_once KHFORM_PATH . '../Inc/html/edit_popup.php';
                 echo '<br>
@@ -209,8 +141,6 @@ class Adas_Divi_Shortcode
                 echo '</tr>';
 
                 foreach ($form_values as $form_value) {
-                    //error_log('$form_values data: ' . print_r($form_value['data'], true));
-                    //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                     $form_id = ($form_value['contact_form_id']);
                     $id = intval($form_value['id']);
@@ -221,23 +151,19 @@ class Adas_Divi_Shortcode
                     echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $id . '</td>';
                     echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
                     echo '<td width="80%" style="border: 1px solid black;">';
-
-                    echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
+                    echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> 
+                    <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
 
 
                     // Table data
                     foreach ($form_value['data'] as $key => $value) {
 
-
-                        //$message = "Variable \$value: Type: " . gettype($value) . ", Value: " . var_export($value, true);
-
-                        //error_log($message);
                         if (empty($value)) {
                             continue;
                         }
 
                         echo '<div>';
-                        echo '<span id="datakey" style="color:' . $this->label_color . ';">' . $key . ': </span>';
+                        echo '<span id="datakey" style="color:' . $this->khdivi_label_color . ';">' . $key . ': </span>';
 
                         if (is_array($value)) {
                             if (array_key_exists('value', $value)) {
@@ -257,35 +183,15 @@ class Adas_Divi_Shortcode
                     echo '<div class="delete-edit-wraper">';
                     echo '<button class="deletebtn" data-form-id="' . esc_attr($id) . '" data-nonce="' . wp_create_nonce('ajax-nonce') . '">
                     <i class="fas fa-trash"></i></button>';
-                    //<button class="delete-btn" data-form-id="' . esc_attr($id) . '"
-                    //data-nonce="' . wp_create_nonce('ajax-nonce') . '">
-                    //<i class="fas fa-trash"></i></button>
                     echo '<button class="editbtn" 
                     data-form-id="' . esc_attr($form_id) . '" data-id="' . esc_attr($id) . '"><i
                     class="fas fa-edit"></i></button>';
                     echo '</div>';
-
-
                     echo '</td>';
                     echo '</tr>';
                 }
-
-                // End table
                 echo '</table>';
-
                 echo '<div class="pagination-links">';
-
-
-                //if ($this->formCount != 0 && $this->items_per_page != 0) {
-                $this->generate_pagination($this->formCount, $this->items_per_page);
-                //}
-
-
-                $current_page = max(1, get_query_var('paged'));
-                $total_pages = ceil($this->formCount / $this->items_per_page);
-                //error_log('$this->formCount: ' . print_r($this->formCount, true));
-                //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
                 echo paginate_links(
                     array(
                         'base' => esc_url(add_query_arg('paged', '%#%')),
@@ -306,9 +212,5 @@ class Adas_Divi_Shortcode
             }
         }
     }
-
-
-
-
 
 }
