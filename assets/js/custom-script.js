@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
 
     var formData = $("#edit-form").serialize();
     var formData = decodeURIComponent(formData); //decode data
-    alert("formData: " + formData);
+    //alert("formData: " + formData);
 
     $.ajax({
       type: "POST",
@@ -116,10 +116,6 @@ jQuery(document).ready(function ($) {
             });
 
             $("#edit-form").append(input); // apend all to edit-form
-            // submit edited fields button
-            // Create the button element with attributes
-            // bt.appendTo("#edit-form");
-            //$("#update-btn").html('<i class="fas fa-check"></i> Checked');
             $(this).html('<i class="fas fa-check"></i> Checked');
           });
 
@@ -157,7 +153,6 @@ jQuery(document).ready(function ($) {
     };
     // Create a URL by concatenating the "custom_vars.ajax_url" with the query parameters.
     var url = custom_vars.ajax_url + "?" + $.param(data);
-    // Redirect the user's browser to the constructed URL.
     window.location.href = url;
   });
 
@@ -171,7 +166,7 @@ jQuery(document).ready(function ($) {
   });
 
   $(".deletebtn").on("click", function () {
-    alert("tetststs");
+    //alert("tetststs");
     var form_id = $(this).data("form-id");
     var id = $(this).data("form-id");
     var nonce = $(this).data("nonce");
@@ -186,7 +181,6 @@ jQuery(document).ready(function ($) {
 
       $.post(custom_vars.ajax_url, data, function (response) {
         console.log(response);
-        // Update the page or handle the response as needed
         location.reload(); // Reload the page for demonstration
       });
     } else {

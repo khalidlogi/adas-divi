@@ -1,12 +1,6 @@
 <?php
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
  *
  * @link              https://web-pro.store
  * @since             1.0.0
@@ -14,8 +8,8 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Adas Form Db Divi
- * Plugin URI:        https://url
- * Description:       Description: Enhance WPForms with a powerful database feature for effortless storage and organization of form submissions.
+ * Plugin URI:        https://web-pro.store
+ * Description:       Description: Enhance Divi Contact Form with a powerful database feature for effortless storage and organization of form submissions.
 
  * Version:           1.0.0
  * Author:            khalidlogi

@@ -82,12 +82,10 @@ class Adas_Divi_Settings
 
 
         // parameters.
-        $this->page_title = esc_html__('Adas divi Database Add-on | shortcode: [display_form_values]', 'adasdividb');
+        $this->page_title = esc_html__('Adas divi Database Add-on | shortcode: [divi_data]', 'adasdividb');
         $this->menu_title = esc_html__('Adas-divi-Db-Addon', 'adasdividb');
         $this->capability = 'manage_options';
         $this->menu_slug = 'khdiviwplist.php';
-
-        //Add settings link
 
         $this->form_action = 'options.php';
 
@@ -96,9 +94,7 @@ class Adas_Divi_Settings
         // actions.
         add_action('admin_menu', array($this, 'add_settings_page'));
         add_action('admin_init', array($this, 'add_settings'));
-        //add_action('init', array($this, 'load_languages'));
 
-        //$this->divi_notice();
 
     }
 
@@ -110,17 +106,6 @@ class Adas_Divi_Settings
         return $links_array;
     }
 
-
-    /**
-     * call back function for action link
-     */
-    function wk_plugin_settings_link($links)
-    {
-
-        $forms_link = '<a href="admin.php?page=khdiviwplist.php">divi Data DB</a>';
-        array_unshift($links, $forms_link);
-        return $links;
-    }
 
     /**
      * Adds a submenu page to the Settings main menu.
@@ -157,14 +142,6 @@ class Adas_Divi_Settings
 
         /**
          * Adds a new section to a settings page.
-         *
-         * Part of the Settings API. Use this to define new settings sections for an admin page.
-         * Show settings sections in your admin page callback function with do_settings_sections().
-         * Add settings fields to your section with add_settings_field().
-         *
-         * The $callback argument should be the name of a function that echoes out any
-         * content you want to show at the top of the settings section before the actual
-         * fields. It can output nothing if you want.
          *
          * @param string   $id       Slug-name to identify the section. Used in the 'id' attribute of tags.
          * @param string   $title    Formatted title of the section. Shown as the heading for the section.
@@ -269,6 +246,9 @@ class Adas_Divi_Settings
         register_setting(
             $this->option_group,
             'items_per_page',
+            array(
+                'default' => '10',
+            )
         );
 
 
@@ -277,7 +257,7 @@ class Adas_Divi_Settings
         // Checkbox field -----------------------------------------------------.
         add_settings_field(
             'Enable_data_saving_checkbox',
-            __('<span class="label_setting">Enable/Disable Data saving', 'adasdividb'),
+            __('<span class="label_setting">Pause Data saving', 'adasdividb'),
             array($this, 'checkbox1_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -287,27 +267,9 @@ class Adas_Divi_Settings
             $this->option_group,
             'Enable_data_saving_checkbox',
             array(
-                'sanitize_callback' => 'sanitize_text_field',
-                'default' => '1',
+                
             )
         );
-
-        /* view 
-        add_settings_field(
-            'view_option',
-            __('<span class="label_setting">View Option', 'adasdividb'),
-            array($this, 'view_option_html'),
-            $this->menu_slug,
-            'cliowp_settings_page_section1'
-        );
-        register_setting(
-            $this->option_group,
-            'view_option',
-            array(
-                'default' => 'normal',
-            )
-        );*/
-
 
 
         // Color field for wraper--------------------------------------------------------.
@@ -372,53 +334,10 @@ class Adas_Divi_Settings
             )
         );
 
-        /* WYSIWYG editor field -----------------------------------------------.
-        add_settings_field(
-            'cliowp_sp_editor1',
-            __('<span class="label_setting">Editor1 Label', 'adasdividb'),
-            array($this, 'editor1_html'),
-            $this->menu_slug,
-            'cliowp_settings_page_section2',
-        );
-
-        register_setting(
-            $this->option_group,
-            'cliowp_sp_editor1',
-            array(
-                'sanitize_callback' => 'wp_kses_post',
-            )
-        );*/
 
     }
 
-    /**
-     * Create HTML for input1 field
-     */
-    public function input_chatid_html()
-    {
-        $chatId = get_option('telegram_chat_id_setting');
-
-        echo '<input class="form-control " type="text" name="telegram_chat_id_setting" value="' . esc_attr($chatId) . '" />';
-    }
-
-    /**
-     * Create HTML for input1 field
-     */
-    public function input_token_html()
-    {
-        $token = get_option('telegram_token_setting');
-        echo '<input class="form-control" type="text" name="telegram_token_setting" value="' . esc_attr($token) . '" />';
-    }
-
-    /**
-     * Create HTML for input1 field
-     */
-    /*public function input1_html()
-    { ?>
-<input type="text" name="cliowp_sp_input1" value="<?php echo esc_attr(get_option('cliowp_sp_input1')); ?>">
-<?php
-    }*/
-
+   
     /**
      * Sanitize input1
      *
@@ -438,51 +357,7 @@ class Adas_Divi_Settings
         return sanitize_text_field($input);
     }
 
-    /**
-     * Create HTML for date1 field
-     */
-    public function date1_html()
-    {
-        ?>
-        <input type="date" name="cliowp_sp_date1" value="<?php echo esc_attr(get_option('cliowp_sp_date1')); ?>">
-        <?php
-    }
 
-    /**
-     * Create HTML for datetime1 field
-     */
-    public function datetime1_html()
-    {
-        ?>
-        <input type="datetime-local" name="cliowp_sp_datetime1"
-            value="<?php echo esc_attr(get_option('cliowp_sp_datetime1')); ?>">
-        <?php
-    }
-
-    /**
-     * Create HTML for password1 field
-     *
-     * This is the only field that does not retrieve the value from the database
-     * (because a hash is stored and not that original value).
-     * Check the wp_options table to view what is saved as a hash.
-     */
-    public function password1_html()
-    {
-        ?>
-        <input class="form-control " type="password" name="cliowp_sp_password1" value="">
-        <?php
-    }
-
-    /**
-     * Encrypt password1
-     *
-     * @param string $input The plain password.
-     */
-    public function encrypt_password1($input)
-    {
-
-        return wp_hash_password($input);
-    }
 
     /**
      * Create HTML for number1 field
@@ -566,10 +441,15 @@ class Adas_Divi_Settings
      */
     public function checkbox1_html()
     {
+        $opt = get_option( 'Enable_data_saving_checkbox' );
+        $value = isset( $opt ) && $opt == 1 ? 1 : '0';       
         ?>
-        <input class="form-control " type="checkbox" name="Enable_data_saving_checkbox" value="1" <?php checked(get_option('Enable_data_saving_checkbox'), '1'); ?>>
-        <?php
-    }
+        <input class="form-control" type="checkbox" name="Enable_data_saving_checkbox"
+        value="1" <?php checked( 1, $value ); ?>
+         >
+<?php    }
+    
+    
 
     public function view_option_html()
     {
@@ -682,18 +562,6 @@ class Adas_Divi_Settings
         return '';
     }
 
-    /**
-     * Create HTML for textarea1 field
-     *
-     * @param array $args Arguments passed.
-     */
-    public function textarea1_html(array $args)
-    {
-        ?>
-        <textarea name="cliowp_sp_textarea1" rows="<?php echo esc_html($args['rows']); ?>"
-            cols="<?php echo esc_html($args['cols']); ?>"><?php echo esc_attr(get_option('cliowp_sp_textarea1')); ?></textarea>
-        <?php
-    }
 
     /**
      * Create HTML for color1 field
@@ -735,16 +603,7 @@ class Adas_Divi_Settings
         <?php
     }
 
-    /**
-     * Create HTML for editor1 field
-     */
-    public function editor1_html()
-    {
-        wp_editor(
-            wp_kses_post(get_option('cliowp_sp_editor1')),
-            'cliowp_sp_editor1',
-        );
-    }
+
 
     /**
      * Create Settings Page HTML
@@ -776,13 +635,6 @@ class Adas_Divi_Settings
     {
         /**
          * Params of load_plugin_textdomain
-         *
-         * @param  string       $domain          Unique identifier for retrieving translated strings
-         * @param  string|false $deprecated      Optional. Deprecated. Use the $plugin_rel_path parameter instead.
-         *                                       Default false.
-         * @param  string|false $plugin_rel_path Optional. Relative path to WP_PLUGIN_DIR where the .mo file resides.
-         *                                       Default false.
-         * @return bool         True when textdomain is successfully loaded, false otherwise.
          */
         load_plugin_textdomain(
             'adasdividb',
@@ -792,5 +644,4 @@ class Adas_Divi_Settings
     }
 }
 
-// instantiate ClioWP Settings Page plugin main class.
 $cliowp_settings_page = new Adas_Divi_Settings();

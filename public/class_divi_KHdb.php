@@ -11,10 +11,13 @@ class class_divi_KHdb
     {
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'divi_table';
+       
+        if($this->is_table_empty() != false) {
         $this->formid = $this->retrieve_form_id();
+        }
+       
         $this->items_per_page = get_option('items_per_page') ? get_option('items_per_page') : 10;
     }
-
 
     public function is_divi_active()
     {
@@ -73,7 +76,13 @@ class class_divi_KHdb
      * @return mixed $divi_form_id.
      */
     function retrieve_form_id()
+
     {
+        if($this->is_table_empty() === true) {
+            error_log("empty data table");
+            $divi_form_id = 0;
+        }
+
         global $wpdb;
         $divi_formid = maybe_unserialize(get_option('divi_form_id_setting'));
        
@@ -84,7 +93,8 @@ class class_divi_KHdb
 
             if ($results === false) {
                 // handle error
-                return 0;
+                $divi_form_id = null;
+                exit();
             }
             if (!empty($results)) {
                 // Create an array to store the number of forms for each form ID
@@ -102,11 +112,12 @@ class class_divi_KHdb
                 $divi_form_id = implode(', ', $divi_formid);
             }
         }
-        error_log('divi_form_id' . print_r($divi_form_id, true));
-        return $divi_form_id;
-
+//        error_log('divi_form_id' . print_r($divi_form_id, true));
+       
+            return $divi_form_id;
       
     }
+
     public static function get_last_three_dates()
     {
         global $wpdb;
@@ -132,9 +143,14 @@ class class_divi_KHdb
 
         $count = $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
         if ($count === '0') {
+            error_log('Table is empty');
             return true; // Table is empty
+
         } else {
+            error_log('Table is empty');
             return false; // Table has data
+
+
         }
     }
 
@@ -193,8 +209,7 @@ class class_divi_KHdb
             $formid = $this->formid;
            
         }
-        error_log('$formid: in retrieve_form_values ' . print_r($formid, true)); 
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
+
 
         if (!empty($items_per)) {
             $items_per = $items_per;
@@ -240,42 +255,6 @@ class class_divi_KHdb
 
     }
 
-
-    /**
-     *  Function to retrieve and unserialize the form values from the database.
-     *
-     * @since 1.0.0
-     */
-    public function retrieve_form_values2()
-    {
-        global $wpdb;
-        $form_values = array();
-
-        // Retrieve the 'form_value' column from the database
-        $results = $wpdb->get_results("SELECT id,contact_form_id, form_values FROM $this->table_name");
-        if (!$results) {
-            //error_log('get_results working KHdb class : ' . $wpdb->last_error);
-        }
-
-        foreach ($results as $result) {
-            $serialized_data = $result->form_valuess;
-            $form_id = $result->contact_form_id;
-            $id = $result->id;
-
-            // Unserialize the serialized form value
-            $unserialized_data = unserialize($serialized_data);
-
-            $form_values[] = array(
-                'form_id' => $form_id,
-                'data' => $unserialized_data,
-                'id' => $id,
-
-
-            );
-        }
-
-        return $form_values;
-    }
 
     // Static method to get the instance of the class
     public static function getInstance()

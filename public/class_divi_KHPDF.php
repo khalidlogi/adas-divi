@@ -21,7 +21,6 @@ if (!class_exists('class_divi_KHPDF')) {
 
         }
 
-        // call back function for data export as PDF using /Mpdf
         public function export_form_data_pdf()
         {
             global $wpdb;
@@ -31,8 +30,6 @@ if (!class_exists('class_divi_KHPDF')) {
                 $dompdf = new Dompdf();
                 $formbyid = $this->myselectedformid;
                 $form_values = class_divi_KHdb::getInstance()->retrieve_form_values_pdf($formbyid);
-                error_log('$form_values: pdf' . print_r($form_values, true));
-                error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
                 foreach ($form_values as $form_value) {
 
@@ -42,7 +39,6 @@ if (!class_exists('class_divi_KHPDF')) {
                     $isOddRow = !$isOddRow;
                     // Define the background color based on $isOddRow
                     $background_color = $isOddRow ? ' #f2f2f2' : 'white';
-
 
                     foreach ($data as $key => $value) {
 
@@ -114,13 +110,9 @@ if (!class_exists('class_divi_KHPDF')) {
 
                 $html_table .= '</tbody></table>';
                 $dompdf->loadHtml($html_table);
-                // (Optional) Setup the paper size and orientation
                 $dompdf->setPaper('A4', 'landscape');
                 // Render the HTML as PDF
                 $dompdf->render();
-
-                // Output the generated PDF to Browser
-                //$dompdf->stream();
                 $dompdf->stream('filename.pdf', array("Attachment" => 0));
                 wp_die(); //Terminate
             } catch (Exception $e) {

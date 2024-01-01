@@ -75,9 +75,7 @@ class Adas_Divi_Shortcode
         );
         global $wpdb;
         $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
-        $current_page = max(1, get_query_var('paged'));
-        $offset = ($current_page - 1) * $this->items_per_page;
-        $total_pages = ceil($this->formCount / $this->items_per_page);
+       
         
         // see if user do not have authorization 
         if (!current_user_can('manage_options')) {
@@ -96,7 +94,6 @@ class Adas_Divi_Shortcode
             }
 
             //Retrieve data from db
-            $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($this->formbyid, $offset, $this->items_per_page, '');
             //error_log('$form_values: from shortcoe' . print_r($form_values, true));
             //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
@@ -108,6 +105,14 @@ class Adas_Divi_Shortcode
                 DB</a></div>';
                 return ob_get_clean();
             } else {
+                $current_page = max(1, get_query_var('paged'));
+                $offset = ($current_page - 1) * (int) $this->items_per_page;
+                if ((int) $this->items_per_page !== 0) {
+                    $total_pages = ceil($this->formCount / (int) $this->items_per_page);
+                } 
+
+
+                $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($this->formbyid, $offset, $this->items_per_page, '');
                 ob_start();
                 //include edit-form file
                 include_once KHFORM_PATH . '../Inc/html/edit_popup.php';

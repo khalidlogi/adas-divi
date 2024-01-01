@@ -71,7 +71,7 @@ class Adas_Divi_Public
 	function get_form_values()
 	{
 		global $wpdb;
-		$form_id = ($_POST['form_id']);
+		$form_id = sanitize_text_field($_POST['form_id']);
 		$id = intval($_POST['id']);
 
 		// Fetch form_value from the wpform_db2 table based on the form_id
@@ -109,20 +109,11 @@ class Adas_Divi_Public
 
 	}
 
-	function send_email($recipient = '', $message = '')
-	{
-		wp_send_json_success('Email sent successfully');
-	}
-
-
 	function delete_form_row()
 	{
 		global $wpdb;
 		//error_log('function delete_form_row() ');
 		$id = intval($_POST['id']);
-
-		//error_log('function delete_form_row() is is ' . print_r($id, true));
-		//error_log('in ' . __FILE__ . ' on line ' . __LINE__);
 
 		if (!$id) {
 			wp_send_json_error('Invalid ID');
@@ -151,12 +142,11 @@ class Adas_Divi_Public
 			// Log success
 			wp_send_json_success("Entry with ID $id deleted successfully");
 		} catch (Exception $e) {
-			// Log error
-			//error_log("Error deleting entry: {$e->getMessage()}");
-			// Handle error gracefully, e.g., display user-friendly message
+			error_log("Error deleting entry: {$e->getMessage()}");
+			
 		}
 
-		wp_send_json_success('ssssssssssssssssssssss ."' . $id . '"');
+		wp_send_json_success('Error while deleting ."' . $id . '"');
 
 		exit;
 	}
@@ -171,17 +161,13 @@ class Adas_Divi_Public
 	{
 
 		global $wpdb;
-
 		// Retrieve the serialized form data from the AJAX request
 		$form_data = sanitize_text_field($_POST['formData']);
-		$form_id = ($_POST['contact_form_id']);
+		$form_id = sanitize_text_field($_POST['contact_form_id']);
 		$id = intval($_POST['id']);
 
 		// Parse the serialized form data
 		parse_str($form_data, $fields);
-		//////error_log('$fields222222: ' . print_r($fields, true));
-		//////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
 
 		if (!$id) {
 			wp_send_json_error('Invalid ID');
@@ -216,8 +202,6 @@ class Adas_Divi_Public
 
 	}
 
-
-
 	/**
 	 *Save entry when a Divi form is submitted
 	 *
@@ -228,26 +212,18 @@ class Adas_Divi_Public
 	function add_new_post($processed_fields_values, $et_contact_error, $contact_form_info)
 	{
 
-
-		error_log('add_new_post active in ' . __FILE__ . ' on line ' . __LINE__);
-
-
 		global $wpdb;
 		if ($et_contact_error === true) {
 			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
 
 			return;
 		}
-		//////error_log('Processed Fields Values: ' . print_r($processed_fields_values, true));
-		//////error_log('ET Contact Error: ' . print_r($et_contact_error, true));
-		//////error_log('Contact Form Info: ' . print_r($contact_form_info, true));
 
 		// Serialize the array data
 		$form_values = serialize($processed_fields_values);
 		$page_id = get_the_ID();
 
 		// page submitted on details
-
 		$page_id = $page_id;
 		$page_name = get_the_title($page_id);
 		$page_url = get_permalink($page_id);
@@ -280,8 +256,6 @@ class Adas_Divi_Public
 				'%s' // Data format
 			)
 		);
-
-
 	}
 
 	/**
@@ -291,72 +265,8 @@ class Adas_Divi_Public
 	 */
 	public function enqueue_styles()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Adas_Divi_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Adas_Divi_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-public.css', array(), $this->version, 'all');
-
-
-
-
-
-
 	}
-
-	/**
-	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function shortcoe_callback()
-	{
-
-		echo ' dddddd';
-		wp_die();
-
-	}
-
-
-	/* AJAX callback function to fetch user names
-																									   function tag_user_get_user_names()
-																									   {
-																										   $args = array('orderby' => 'display_name');
-																										   $wp_user_query = new WP_User_Query($args);
-																										   $authors = $wp_user_query->get_results();
-																										   $user_emails = array();
-
-																										   if (!empty($authors)) {
-
-																											   foreach ($authors as $author) {
-																												   $author_info = get_userdata($author->ID);
-																												   $user_emails[] = $author_info->user_email;
-																												   ////error_log('$user_emails: ' . print_r($user_emails, true));
-																												   ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																											   }
-																											   ////error_log('user_emails: ' . print_r($user_emails, true));
-																											   ////error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-																											   wp_send_json_success($user_emails);
-																										   } else {
-																											   wp_send_json_error('No results');
-																										   }
-
-
-
-
-
-																									   }*/
-
-
 	/**
 	 * Register the JavaScript for the public-facing side of the site.
 	 *
@@ -365,23 +275,7 @@ class Adas_Divi_Public
 	public function enqueue_scripts()
 	{
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Adas_Divi_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Adas_Divi_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-public.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/tag-user-script.js', array('jquery'), $this->version, false);
-
-		// Localize the script with custom variables for AJAX.
-		//wp_localize_script('custom-script', 'custom_vars', array('ajax_url' => admin_url('admin-ajax.php')));
+		//wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-public.js', array('jquery'), $this->version, false);
 
 	}
 

@@ -106,10 +106,7 @@ class Adas_Divi
 			define('KHFORM_PATH', plugin_dir_path(__FILE__));
 		}
 
-		/* Plugin Folder URL.
-																																							  if (!defined('WPFORMS_PLUGIN_URL')) {
-																																								  define('KHFORM_URL', plugin_dir_url(__FILE__));
-																																							  }*/
+	
 	}
 
 
@@ -158,7 +155,6 @@ class Adas_Divi
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-shortcode.php';
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-logs.php';
-
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHdb.php';
 
@@ -234,16 +230,10 @@ class Adas_Divi
 		$isdataenabled = get_option('Enable_data_saving_checkbox');
 
 
-		//if (!empty($isdataenabled)) {
-		//}
-		//if (has_action('et_pb_contact_form_submit')) {
-		// The hook 'et_pb_contact_form_submit' exists
-		$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
-		error_log("The hook 'et_pb_contact_form_submit' exists.");
-		//} else {
-		// The hook 'et_pb_contact_form_submit' does not exist
-		error_log("The hook 'et_pb_contact_form_submit' does not exist.");
-		//}
+		if ($isdataenabled !== '1') {
+			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
+
+		}
 
 		$this->loader->add_action('wp_ajax_get_form_values', $plugin_public, 'get_form_values');
 		$this->loader->add_action('wp_ajax_nopriv_get_form_values', $plugin_public, 'get_form_values');
@@ -254,25 +244,9 @@ class Adas_Divi
 		$this->loader->add_action('wp_ajax_delete_form_row', $plugin_public, 'delete_form_row');
 		$this->loader->add_action('wp_ajax_nopriv_delete_form_row', $plugin_public, 'delete_form_row');
 
-
 		$this->loader->add_action('wp_ajax_update_send_email', $plugin_public, 'send_email');
 		$this->loader->add_action('wp_ajax_nopriv_send_email', $plugin_public, 'send_email');
 
-		//Redirect to thank you page
-		//$this->loader->add_action('template_redirect', $plugin_public, 'template_redirect');
-
-
-
-
-
-
-		//tag useres
-		// Enqueue JavaScript and CSS files
-
-		//$this->loader->add_action('wp_ajax_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
-		//$this->loader->add_action('wp_ajax_nopriv_tag_user_get_user_names', $plugin_public, 'tag_user_get_user_names');
-
-		// Insitantiate shortcode Class
 		new Adas_Divi_Shortcode();
 		new Adas_Divi_Logs();
 
