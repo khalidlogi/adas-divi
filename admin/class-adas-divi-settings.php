@@ -444,7 +444,7 @@ class Adas_Divi_Settings
         $opt = get_option( 'Enable_data_saving_checkbox' );
         $value = isset( $opt ) && $opt == 1 ? 1 : '0';       
         ?>
-        <input class="form-control" type="checkbox" name="Enable_data_saving_checkbox"
+        <input class="form-control Enable_data_saving_checkbox" type="checkbox" name="Enable_data_saving_checkbox"
         value="1" <?php checked( 1, $value ); ?>
          >
 <?php    }
@@ -489,7 +489,7 @@ class Adas_Divi_Settings
 
         $numberperpage = get_option('items_per_page');
 
-        echo '<input class="form-control " type="text" name="items_per_page" value="' . esc_attr($numberperpage) . '" />';
+        echo '<input class="form-control-items_per_page" type="text" name="items_per_page" value="' . esc_attr($numberperpage) . '" />';
     }
 
 
@@ -523,7 +523,7 @@ class Adas_Divi_Settings
 
             </option>
 
-            <select name="divi_form_id_setting[]" multiple>
+            <select name="divi_form_id_setting[]" class="divi_form_select_id_setting" multiple>
                 <?php
                 foreach ($results_formids as $form_id) {
                     //////error_log(print_r($form_id, true));

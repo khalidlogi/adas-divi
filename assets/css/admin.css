@@ -6,31 +6,43 @@
   padding: 10px;
 }
 .information-text {
-  background-color: #cce5ff; /* Change the background color as desired */
-  border: 1px solid #0066cc; /* Add a blue border for emphasis */
-  padding: 10px; /* Adjust the padding to your liking */
-  color: #0066cc; /* Set the text color to blue or your preferred color */
-  font-weight: bold; /* Make the text bold if desired */
+  /* background-color: #cce5ff; */
+  border: 1px solid #0066cc;
+  width: 500px;
+  padding: 10px;
+  color: #0066cc;
+  font-weight: 600;
   margin-bottom: 12px;
+}
+.divi_form_select_id_setting{
+  height: auto;
+  text-align: center;
+  color: #302929;
+  padding-bottom: -4px;
+  padding-top: 8px;
+  background: #fff;
 }
 .label_setting {
   display: inline-block;
-  padding: 8px 17px;
+  /* padding: 8px 17px; */
   font-size: 15px;
   font-weight: 600;
-  background-color: #5a84b5;
-  color: #fff;
+  font-size: 20px;
+  /* background-color: #5a84b5; */
+  color: #444141;
   border-radius: 4px;
   margin-right: 5px;
 }
 /* Primary label */
 .label-primary {
-  font-size: 19px;
-  border-radius: 5%;
-  width: 192px;
+  font-size: 22px;
+  padding: 16px;
+  /* border-radius: 5%; */
+  border: 1px solid black;
+  /* width: 192px; */
   text-align: center;
-  color: beige;
-  background: #c21d1d;
+  color: #084ad5cf;
+  /* background: #c21d1d; */
 }
 primary {
   background-color: #1f2021;
@@ -58,6 +70,13 @@ primary {
   border-radius: 4px;
   box-sizing: border-box;
 }
+input.form-control-items_per_page{
+  width: 100px;
+  font-weight: 500;
+  text-align: center;
+  font-size: 19px;
+  color: #0066cc;
+}
 
 #form_id_setting {
   width: 100%;
@@ -67,6 +86,24 @@ primary {
   box-sizing: border-box;
   background-color: #fff; /* Background color */
   color: #333; /* Text color */
+}
+
+.Enable_data_saving_checkbox {
+  /* Define your custom styles */
+  /* For example: */
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.Enable_data_saving_checkbox:checked {
+  /* Define styles for the checked state */
+  /* For example: */
+  background-color: #007bff;
+  border-color: #007bff;
 }
 
 #form_id_setting option:checked {
