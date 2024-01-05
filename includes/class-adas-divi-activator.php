@@ -33,7 +33,8 @@ class Adas_Divi_Activator
 	public static function activate()
 	{
 		global $wpdb;
-
+		$is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+		self::Checking_things();
 		// Table name
 		$table_name = $wpdb->prefix . 'divi_table';
 
@@ -55,9 +56,55 @@ class Adas_Divi_Activator
 		dbDelta($sql);
 
 	}
+
+	public static function Checking_things(){
+	global $wp_version;
+	$is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+
+
+	$php = '5.3';
+	$wp  = '3.8';
+
+
+	if ( !$is_divi_active ) {
+		deactivate_plugins( basename( __FILE__ ) );
+		wp_die(
+			'<p>' .
+			sprintf(
+				__( 'Divi Theme is not ACTIVE. Please Activate the theme and try again!', 'my_plugin' ),
+				$php
+			)
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
+		);
+	}
 	
-	
+	if ( version_compare( PHP_VERSION, $php, '<' ) ) {
+		deactivate_plugins( basename( __FILE__ ) );
+		wp_die(
+			'<p>' .
+			sprintf(
+				__( 'This plugin can not be activated because it requires a PHP version greater than %1$s. Your PHP version can be updated by your hosting company.', 'my_plugin' ),
+				$php
+			)
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
+		);
+	}
 
-
-
+	if ( version_compare( $wp_version, $wp, '<' ) ) {
+		deactivate_plugins( basename( __FILE__ ) );
+		wp_die(
+			'<p>' .
+			sprintf(
+				__( 'This plugin can not be activated because it requires a WordPress version greater than %1$s. Please go to Dashboard &#9656; Updates to gran the latest version of WordPress .', 'my_plugin' ),
+				$php
+			)
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
+		);
+	}
 }
+	}
+	
+	
+
+
+

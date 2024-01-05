@@ -14,7 +14,8 @@ class Adas_Divi_Shortcode
     {
 
         global $wpdb;
-        $this->table_name = 'divi_table';
+        $this->table_name = $wpdb->prefix . 'divi_table';
+
 
         $options = [
             'khdivi_label_color' => '#bfa1a1',
@@ -32,8 +33,6 @@ class Adas_Divi_Shortcode
 
         //get the form id 
         $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
-        error_log('$this->formbyid: ' . print_r($this->formbyid, true)); 
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__); 
 
         // get the number of forms
         $this->formCount = class_divi_KHdb::getInstance()->count_items($this->formbyid);
@@ -67,16 +66,24 @@ class Adas_Divi_Shortcode
     function display_form_values_shortcode_table($atts)
     {
 
+        global $wpdb;
+        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+
+
+        // Check if the table exists
+       if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") != $this->table_name) {
+        // Table does not exist, exit the function
+        return;
+    }
+
         $atts = shortcode_atts(
             array(
                 'id' => '',
             ),
             $atts
         );
-        global $wpdb;
-        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
+
        
-        
         // see if user do not have authorization 
         if (!current_user_can('manage_options')) {
 
@@ -93,10 +100,6 @@ class Adas_Divi_Shortcode
                 $formbyid = $this->formbyid;
             }
 
-            //Retrieve data from db
-            //error_log('$form_values: from shortcoe' . print_r($form_values, true));
-            //error_log('in ' . __FILE__ . ' on line ' . __LINE__);
-
             //Check if there is at least one entry
             if (class_divi_KHdb::getInstance()->is_table_empty() === true) {
                 ob_start();
@@ -110,7 +113,6 @@ class Adas_Divi_Shortcode
                 if ((int) $this->items_per_page !== 0) {
                     $total_pages = ceil($this->formCount / (int) $this->items_per_page);
                 } 
-
 
                 $form_values = class_divi_KHdb::getInstance()->retrieve_form_values($this->formbyid, $offset, $this->items_per_page, '');
                 ob_start();
@@ -133,68 +135,72 @@ class Adas_Divi_Shortcode
                     if (!empty($formbyid)) {
                         echo '<br> Default form id: <span style="color:blue;">' . (($formbyid === '1') ? 'Show all forms' : $formbyid) . '</span>';
                     }
-                }
-                // Start table
-                echo '<div class="form-data-container">';
-                echo '<table style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
+               
+                     // Start table
+                    echo '<div class="form-data-container">';
+                    echo '<table style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
 
-                // Table header
-                echo '<tr>';
-                echo '<th>ID</th>';
-                echo '<th>Form ID</th>';
-                echo '<th>Data</th>';
-                echo '</tr>';
-
-                foreach ($form_values as $form_value) {
-
-                    $form_id = ($form_value['contact_form_id']);
-                    $id = intval($form_value['id']);
-                    $date = $form_value['date'];
-
-                    // Table row
-                    echo '<tr style="border: .5px solid black;" >';
-                    echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $id . '</td>';
-                    echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
-                    echo '<td width="80%" style="border: 1px solid black;">';
-                    echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> 
-                    <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
-
-
-                    // Table data
-                    foreach ($form_value['data'] as $key => $value) {
-
-                        if (empty($value)) {
-                            continue;
-                        }
-
-                        echo '<div>';
-                        echo '<span id="datakey" style="color:' . $this->khdivi_label_color . ';">' . $key . ': </span>';
-
-                        if (is_array($value)) {
-                            if (array_key_exists('value', $value)) {
-                                $this->display_value($value['value'], $key);
-                            } else {
-                                foreach ($value as $val) {
-                                    $this->display_value($val, $key);
-                                }
-                            }
-                        } else {
-                            $this->display_value($value, $key);
-                        }
-
-                        echo '</div>';
-                    }
-
-                    echo '<div class="delete-edit-wraper">';
-                    echo '<button class="deletebtn" data-form-id="' . esc_attr($id) . '" data-nonce="' . wp_create_nonce('ajax-nonce') . '">
-                    <i class="fas fa-trash"></i></button>';
-                    echo '<button class="editbtn" 
-                    data-form-id="' . esc_attr($form_id) . '" data-id="' . esc_attr($id) . '"><i
-                    class="fas fa-edit"></i></button>';
-                    echo '</div>';
-                    echo '</td>';
+                    // Table header
+                    echo '<tr>';
+                    echo '<th>ID</th>';
+                    echo '<th>Form ID</th>';
+                    echo '<th>Data</th>';
                     echo '</tr>';
+                    
+                    foreach ($form_values as $form_value) {
+
+                        $form_id = ($form_value['contact_form_id']);
+                        $id = intval($form_value['id']);
+                        $date = $form_value['date'];
+    
+                        // Table row
+                        echo '<tr style="border: .5px solid black;" >';
+                        echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $id . '</td>';
+                        echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
+                        echo '<td width="80%" style="border: 1px solid black;">';
+                        echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> 
+                        <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
+    
+    
+                        // Table data
+                        foreach ($form_value['data'] as $key => $value) {
+    
+                            if (empty($value)) {
+                                continue;
+                            }
+    
+                            echo '<div>';
+                            echo '<span id="datakey" style="color:' . $this->khdivi_label_color . ';">' . $key . ': </span>';
+    
+                            if (is_array($value)) {
+                                if (array_key_exists('value', $value)) {
+                                    $this->display_value($value['value'], $key);
+                                } else {
+                                    foreach ($value as $val) {
+                                        $this->display_value($val, $key);
+                                    }
+                                }
+                            } else {
+                                $this->display_value($value, $key);
+                            }
+    
+                            echo '</div>';
+                        }
+    
+                        echo '<div class="delete-edit-wraper">';
+                        echo '<button class="deletebtn" data-form-id="' . esc_attr($id) . '" data-nonce="' . wp_create_nonce('ajax-nonce') . '">
+                        <i class="fas fa-trash"></i></button>';
+                        echo '<button class="editbtn" 
+                        data-form-id="' . esc_attr($form_id) . '" data-id="' . esc_attr($id) . '"><i
+                        class="fas fa-edit"></i></button>';
+                        echo '</div>';
+                        echo '</td>';
+                        echo '</tr>';
+                    }
                 }
+               
+
+                
                 echo '</table>';
                 echo '<div class="pagination-links">';
                 echo paginate_links(

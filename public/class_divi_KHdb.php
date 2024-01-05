@@ -40,7 +40,13 @@ class class_divi_KHdb
     {
         global $wpdb;
         
-        if (empty($formid)) {
+         // Check if the table exists
+         $table_name = $wpdb->prefix . 'divi_table';
+         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+             // Table does not exist, exit the function
+             return;
+         }
+         if (empty($formid)) {
             // Select all rows.
             $query = "SELECT COUNT(DISTINCT id) FROM {$this->table_name}";
             $items_count = $wpdb->get_var($query);
@@ -77,13 +83,21 @@ class class_divi_KHdb
      */
     function retrieve_form_id()
 
-    {
+    {        
+        
+        global $wpdb;
+        // Check if the table exists
+        $table_name = $wpdb->prefix . 'divi_table';
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            // Table does not exist, exit the function
+            return;
+        }
+
         if($this->is_table_empty() === true) {
             error_log("empty data table");
             $divi_form_id = 0;
         }
 
-        global $wpdb;
         $divi_formid = maybe_unserialize(get_option('divi_form_id_setting'));
        
         if (empty($divi_formid)) {
@@ -141,15 +155,19 @@ class class_divi_KHdb
     {
         global $wpdb;
 
-        $count = $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
+         // Check if the table exists
+         if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") != $this->table_name) {
+             // Table does not exist, exit the function
+             return;
+         }
+         $count = $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
         if ($count === '0') {
-            error_log('Table is empty');
+            error_log('Table is hhh empty');
             return true; // Table is empty
 
         } else {
             error_log('Table is empty');
             return false; // Table has data
-
 
         }
     }
@@ -203,6 +221,12 @@ class class_divi_KHdb
     public function retrieve_form_values($formid = '', $offset = '', $items_per = '', $LIMIT = '')
     {
         global $wpdb;
+         // Check if the table exists
+         if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") != $this->table_name) {
+             // Table does not exist, exit the function
+             return;
+         }
+
         if (!empty($formid)) {
             $formid = $formid;
         } else {
@@ -215,7 +239,9 @@ class class_divi_KHdb
             $items_per = $items_per;
         }
    
-        $formids = explode(',', $formid); // split the form ids
+        if ($formid !== null) {
+            $formids = explode(',', $formid); // split the form ids
+        } 
         $formids = array_map('trim', $formids); // trim whitespace
         $formid_placeholders = implode(',', array_fill(0, count($formids), '%s')); // create placeholders for each id
         

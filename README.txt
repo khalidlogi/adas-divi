@@ -18,7 +18,7 @@ This plugin seamlessly integrates with the Divi theme's contact form. It stores 
 
 This section describes how to install the plugin and get it working.
 
-1. Upload `adas-divi.php` to the `/wp-content/plugins/` directory.
+1. Upload plugin zip file to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Utilize the shortcode `[divi_data]` to display the stored Divi theme contact form entries.
 

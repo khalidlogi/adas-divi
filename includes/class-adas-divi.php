@@ -167,6 +167,8 @@ class Adas_Divi
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHCSV.php';
 
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-KHwidget.php';
+
 
 
 		$this->loader = new Adas_Divi_Loader();

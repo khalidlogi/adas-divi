@@ -99,14 +99,6 @@ class Adas_Divi_Settings
     }
 
 
-    function divi_settings_link($links_array)
-    {
-        $Settings = '<a href="admin.php?page=khdiviwplist.php">Settings</a>';
-        array_unshift($links_array, $Settings);
-        return $links_array;
-    }
-
-
     /**
      * Adds a submenu page to the Settings main menu.
      */
@@ -251,9 +243,6 @@ class Adas_Divi_Settings
             )
         );
 
-
-
-
         // Checkbox field -----------------------------------------------------.
         add_settings_field(
             'Enable_data_saving_checkbox',
@@ -270,7 +259,6 @@ class Adas_Divi_Settings
                 
             )
         );
-
 
         // Color field for wraper--------------------------------------------------------.
         add_settings_field(
@@ -337,7 +325,7 @@ class Adas_Divi_Settings
 
     }
 
-   
+
     /**
      * Sanitize input1
      *
@@ -356,8 +344,6 @@ class Adas_Divi_Settings
 
         return sanitize_text_field($input);
     }
-
-
 
     /**
      * Create HTML for number1 field
@@ -397,44 +383,7 @@ class Adas_Divi_Settings
 
     }
 
-    /**
-     * Create HTML for select1 field
-     */
-    public function select1_html()
-    {
-        ?>
-        <select name="cliowp_sp_select1">
-            <option value="1" <?php selected(get_option('cliowp_sp_select1'), '1'); ?>>
-                <?php esc_attr_e('Option1', 'adasdividb'); ?>
-            </option>
-            <option value="2" <?php selected(get_option('cliowp_sp_select1'), '2'); ?>>
-                <?php esc_attr_e('Option2', 'adasdividb'); ?>
-            </option>
-            <option value="3" <?php selected(get_option('cliowp_sp_select1'), '3'); ?>>
-                <?php esc_attr_e('Option3', 'adasdividb'); ?>
-            </option>
-        </select>
-        <?php
-    }
 
-    /**
-     * Sanitize select1
-     *
-     * @param string $input The selected value.
-     */
-    public function sanitize_select1($input)
-    {
-        $valid_input = array('1', '2', '3');
-        if (false === in_array($input, $valid_input, true)) {
-            add_settings_error(
-                'cliowp_sp_select1',
-                'cliowp_sp_select1_error',
-                esc_html__('Invalid option for Select1', 'adasdividb'),
-            );
-            return get_option('cliowp_sp_select1');
-        }
-        return $input;
-    }
 
     /**
      * Create HTML for checkbox1 field
@@ -451,35 +400,6 @@ class Adas_Divi_Settings
     
     
 
-    public function view_option_html()
-    {
-        $selected_option = get_option('view_option') ?: 'normal';
-        $table_view_selected = ($selected_option === 'table') ? 'checked' : '';
-        $normal_view_selected = ($selected_option === 'normal') ? 'checked' : '';
-        ?>
-        <style>
-
-        </style>
-        <label class="view-option-label">
-            <input type="radio" name="view_option" value="table" <?php echo $table_view_selected; ?>>
-            <img width="220" src="<?php echo plugins_url('/assets/img/table.png', dirname(__FILE__)); ?>" alt="Table View">
-        </label>
-        <label class="view-option-label">
-            <input type="radio" name="view_option" value="normal" <?php echo $normal_view_selected; ?>>
-            <img width="220" src="<?php echo plugins_url('/assets/img/normal.png', dirname(__FILE__)); ?>" alt="Table View">
-        </label>
-        <?php
-    }
-
-    /**
-     * Create HTML for Notification checkbox field
-     */
-    public function checkbox2_html()
-    {
-        ?>
-        <input class="my-custom-checkbox" type="checkbox" name="Enable_notification_checkbox" value="1" <?php checked(get_option('Enable_notification_checkbox'), '1'); ?>>
-        <?php
-    }
 
     /**
      * Create HTML for Notification checkbox field
@@ -504,7 +424,6 @@ class Adas_Divi_Settings
 
         $table_name = $wpdb->prefix . 'divi_table';
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
-        //////error_log(print_r($results_formids, true));
 
         if (!$is_divi_active) {
             // The plugin is not activated
@@ -526,9 +445,7 @@ class Adas_Divi_Settings
             <select name="divi_form_id_setting[]" class="divi_form_select_id_setting" multiple>
                 <?php
                 foreach ($results_formids as $form_id) {
-                    //////error_log(print_r($form_id, true));
                     $option_value = esc_attr($form_id->contact_form_id);
-                    // $selected = in_array($option_value, $selected_values) ? 'selected' : '';
                     echo "<option value='" . esc_html($option_value) . "' " . esc_html($this->cliowp_multiselected($selected_values, $option_value)) . ">
                 Form ID: $option_value</option>";
                 }

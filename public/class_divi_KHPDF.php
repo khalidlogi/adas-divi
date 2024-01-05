@@ -15,8 +15,12 @@ if (!class_exists('class_divi_KHPDF')) {
         public function __construct()
         {
             $this->text_color = 'black';
-            add_action('wp_ajax_export_form_data_pdf', array($this, 'export_form_data_pdf'));
-            add_action('wp_ajax_nopriv_export_form_data_pdf', array($this, 'export_form_data_pdf'));
+             //Check if there is at least one entry
+             if (class_divi_KHdb::getInstance()->is_table_empty() !== true) {
+                add_action('wp_ajax_export_form_data_pdf', array($this, 'export_form_data_pdf'));
+                add_action('wp_ajax_nopriv_export_form_data_pdf', array($this, 'export_form_data_pdf'));
+            } 
+           
             require_once dirname(__DIR__) . '/vendor/autoload.php';
 
         }
