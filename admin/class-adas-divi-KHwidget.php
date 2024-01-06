@@ -19,6 +19,16 @@ class Adas_Divi_KHwidget {
         );
 
     }
+
+       // update the data saving option value
+       function update_data_saving_option() {
+        if(current_user_can('manage_options')) {
+            $new_value = $_POST['value_data_ischecked'];
+            update_option('Enable_data_saving_checkbox', $new_value);
+        }
+        wp_die();
+    }
+    
     function my_divi_table_dashboard_widget_display() {
         global $wpdb;
         $table_name = $wpdb->prefix.'divi_table';
@@ -66,43 +76,49 @@ jQuery(document).ready(function($) {
 </script>
 
 <?php
-        // Get the form IDs
-        $sql = "SELECT DISTINCT contact_form_id FROM {$table_name}";
-        $results = $wpdb->get_results($sql);
-
-        if(!empty($results)) {
-            
-            $form_counts = array();
-
-            // Loop through the results and count the number of forms for each form ID
-            foreach($results as $row) {
-                $form_id = $row->contact_form_id;
-
-                $sql = "SELECT COUNT(*) AS count FROM {$table_name} WHERE contact_form_id IN ('$form_id')";
-                $result2 = $wpdb->get_results($sql);
-                $row2 = $result2[0];
-
-                $form_counts[$form_id] = $row2->count;
-            }
-
-            // Print the number of forms for each form ID
-            foreach($form_counts as $form_id => $count) {
-                echo "<strong>Form ID:</strong> $form_id,<strong> Number of forms:</strong> $count<br>";
-            }
-            echo '<br><strong>Recently Published</strong> <br>';
-
-        }
-        
-        //get the date of last submissions
-        $result = class_divi_KHdb::getInstance()->get_last_three_dates();
-        foreach($result as $result) {
-            echo $result.'<br>';
-        }
         //Display last entry
+        $this->get_form_counts_and_recent_dates();
         $this->my_first_custom_widget_display();
 
     }}
 
+    function get_form_counts_and_recent_dates() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'divi_table';
+        
+        // Get the form IDs and count the number of forms for each form ID
+        $sql = "SELECT DISTINCT contact_form_id FROM {$table_name}";
+        $results = $wpdb->get_results($sql);
+        
+        if (!empty($results)) {
+            $form_counts = array();
+            
+            foreach ($results as $row) {
+                $form_id = $row->contact_form_id;
+                
+                $sql = "SELECT COUNT(*) AS count FROM {$table_name} WHERE contact_form_id IN ('$form_id')";
+                $result2 = $wpdb->get_results($sql);
+                $row2 = $result2[0];
+                
+                $form_counts[$form_id] = $row2->count;
+            }
+            
+            // Print the number of forms for each form ID
+            foreach ($form_counts as $form_id => $count) {
+                echo "<br><strong>Form ID:</strong> $form_id, <strong>Number of forms:</strong> $count<br>";
+            }
+            
+            echo '<br><strong>Recently Published</strong><br>';
+        }
+        
+        // Get the date of last submissions
+        $result = class_divi_KHdb::getInstance()->get_last_three_dates();
+        foreach ($result as $result) {
+            echo $result . '<br>';
+        }
+    }
+
+       //Show last entry
        function my_first_custom_widget_display() {
        
         global $wpdb;
@@ -117,7 +133,7 @@ jQuery(document).ready(function($) {
         error_log("Database error: " . $wpdb->last_error);
 
         if (class_divi_KHdb::getInstance()->is_table_empty() === true) {
-            echo '<div style="text-align: center; color: red;">Add entries to your form and try again.';
+            echo '<br><div style="text-align: center; color: red;">Add entries to your form and try again.';
             echo ' <a style="text-align: center; color: black;" href="' . admin_url('admin.php?page=khdiviwplist.php') . '">Settings
             DB</a></div>';
         } 
@@ -140,7 +156,7 @@ jQuery(document).ready(function($) {
 
         // Display the data
         foreach ($form_values as $form_value) {
-        echo "<br><strong>Contact Form ID: </strong>" . $form_value['contact_form_id'] . "<br>";
+       // echo "<br><strong>Contact Form ID: </strong>" . $form_value['contact_form_id'] . "<br>";
         echo "<strong>ID:</strong> " . $form_value['id'] . "<br>";
         echo "<strong>Date:</strong> " . $form_value['date'] . "<br>";
         
@@ -158,16 +174,9 @@ jQuery(document).ready(function($) {
         echo "<br>";
     }
 }
-    }
-
-    // update the data saving option value
-    function update_data_saving_option() {
-        if(current_user_can('manage_options')) {
-            $new_value = $_POST['value_data_ischecked'];
-            update_option('Enable_data_saving_checkbox', $new_value);
-        }
-        wp_die();
-    }
+}
    
-}}
+
+
+  }}
 new Adas_Divi_KHwidget();

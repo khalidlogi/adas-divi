@@ -160,55 +160,12 @@ class Adas_Divi_Settings
 
         /**
          * Adds a new field to a section of a settings page.
-         *
-         * Part of the Settings API. Use this to define a settings field that will show
-         * as part of a settings section inside a settings page. The fields are shown using
-         * do_settings_fields() in do_settings_sections().
-         *
-         * The $callback argument should be the name of a function that echoes out the
-         * HTML input tags for this setting field. Use get_option() to retrieve existing
-         * values to show.
-         *
-         * @param string   $id       Slug-name to identify the field. Used in the 'id' attribute of tags.
-         * @param string   $title    Formatted title of the field. Shown as the label for the field
-         *                           during output.
-         * @param callable $callback Function that fills the field with the desired form inputs. The
-         *                           function should echo its output.
-         * @param string   $page     The slug-name of the settings page on which to show the section
-         *                           (general, reading, writing, ...).
-         * @param string   $section  Optional. The slug-name of the section of the settings page
-         *                           in which to show the box. Default 'default'.
-         * @param array    $args     {
-         *                           Optional. Extra arguments used when outputting the field.
-         *
-         *     @type string $label_for When supplied, the setting title will be wrapped
-         *                             in a `<label>` element, its `for` attribute populated
-         *                             with this value.
-         *     @type string $class     CSS Class to be added to the `<tr>` element when the
-         *                             field is output.
-         * }
          */
 
 
         /**
          * Registers a setting and its data.
-         *
-         * @param string $option_group A settings group name. Should correspond to an allowed option key name.
-         *                             Default allowed option key names include 'general', 'discussion', 'media',
-         *                             'reading', 'writing', and 'options'.
-         * @param string $option_name The name of an option to sanitize and save.
-         * @param array  $args {
-         *     Data used to describe the setting when registered.
-         *
-         *     @type string     $type              The type of data associated with this setting.
-         *                                         Valid values are 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
-         *     @type string     $description       A description of the data attached to this setting.
-         *     @type callable   $sanitize_callback A callback function that sanitizes the option's value.
-         *     @type bool|array $show_in_rest      Whether data associated with this setting should be included in the REST API.
-         *                                         When registering complex settings, this argument may optionally be an
-         *                                         array with a 'schema' key.
-         *     @type mixed      $default           Default value when calling `get_option()`.
-         * }
+         * 
          */
 
 
@@ -382,8 +339,6 @@ class Adas_Divi_Settings
         }
 
     }
-
-
 
     /**
      * Create HTML for checkbox1 field

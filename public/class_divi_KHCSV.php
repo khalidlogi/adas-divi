@@ -9,8 +9,10 @@ if (!class_exists('class_divi_KHCSV')) {
         public function __construct()
         {
             $this->myselectedformid = class_divi_KHdb::getInstance()->retrieve_form_id();
+            if (class_divi_KHdb::getInstance()->is_table_empty() !== true) {
             add_action('wp_ajax_export_form_data', array($this, 'export_form_data'));
             add_action('wp_ajax_nopriv_export_form_data', array($this, 'export_form_data'));
+            }
         }
 
         /**

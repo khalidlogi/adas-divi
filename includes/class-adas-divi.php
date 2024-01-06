@@ -154,11 +154,8 @@ class Adas_Divi
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-shortcode.php';
 
-		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-logs.php';
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHdb.php';
 
-		// Settings file
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-settings.php';
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/adas-enqueue.php';
@@ -250,7 +247,6 @@ class Adas_Divi
 		$this->loader->add_action('wp_ajax_nopriv_send_email', $plugin_public, 'send_email');
 
 		new Adas_Divi_Shortcode();
-		new Adas_Divi_Logs();
 
 
 	}
