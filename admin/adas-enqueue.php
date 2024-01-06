@@ -23,6 +23,8 @@ class EnqueueClass
     {
         wp_enqueue_style('admin_style', plugin_dir_url(__FILE__) . '../assets/css/admin.css');
         wp_enqueue_style('admin_style', plugin_dir_url(__FILE__) . '../assets/css/bootstrap.min.css');
+        wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . '../assets/css/font-awesome.css');
+
 
     }
 

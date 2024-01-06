@@ -144,14 +144,14 @@ class Adas_Divi_Settings
          */
         add_settings_section(
             'cliowp_settings_page_section1',
-            __('<span class="label_setting label-primary">Database settings ', 'adasdividb'),
-            null,
+            '<span class="label_setting label-primary"><i class="fas fa-database"></i> Database settings</span>',            null,
             $this->menu_slug
         );
 
         add_settings_section(
             'cliowp_settings_page_section2',
-            __('<span class="label_setting label-primary">Appearnces', 'adasdividb'),
+            __('<span class="label_setting label-primary"><i class="fas fa-paint-brush"></i>
+            Style', 'adasdividb'),
             null,
             $this->menu_slug
         );
@@ -492,7 +492,7 @@ class Adas_Divi_Settings
                 <?php
                 settings_fields($this->option_group);
                 do_settings_sections($this->menu_slug);
-                submit_button();
+                submit_button('Save Settings', 'primary', 'adas-divi-submit-button');
                 ?>
             </form>
         </div>

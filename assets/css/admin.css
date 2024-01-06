@@ -1,9 +1,11 @@
 .warning-text {
-  color: #ff0000; /* Red color */
-  font-weight: bold;
-  background-color: #ffcccc; /* Light pink background */
-  border: 1px solid #ff0000; /* Red border */
+  background-color: #ffff0042;
+  border: 1px solid #0066cc;
+  width: 633px;
   padding: 10px;
+  color: #45515e;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 .information-text {
   /* background-color: #cce5ff; */
@@ -29,21 +31,36 @@
   font-weight: 600;
   font-size: 20px;
   /* background-color: #5a84b5; */
-  color: #444141;
+  color: #455473e3;
   border-radius: 4px;
   margin-right: 5px;
 }
 /* Primary label */
 .label-primary {
   font-size: 22px;
-  padding: 16px;
   /* border-radius: 5%; */
-  border: 1px solid black;
-  /* width: 192px; */
+  margin-top: 25px;
+    /* width: 192px; */
   text-align: center;
   color: #084ad5cf;
   /* background: #c21d1d; */
 }
+.information-text {
+  /* background-color: #cce5ff; */
+  border: 1px solid #0066cc;
+  width: 500px;
+  padding: 10px;
+  color: #0066cc;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+input#adas-divi-submit-button {
+  font-size: 19px;
+  background: #2858bae3;
+  color: white;
+}
+
 primary {
   background-color: #1f2021;
   font-size: 22px;
@@ -70,11 +87,12 @@ primary {
   border-radius: 4px;
   box-sizing: border-box;
 }
-input.form-control-items_per_page{
-  width: 100px;
+input.form-control-items_per_page {
+  width: 85px;
+  background: #ffff0042;
   font-weight: 500;
   text-align: center;
-  font-size: 19px;
+  font-size: 17px;
   color: #0066cc;
 }
 
