@@ -83,7 +83,7 @@ class Adas_Divi_Settings
 
         // parameters.
         $this->page_title = esc_html__('Adas divi Database Add-on | shortcode: [divi_data]', 'adasdividb');
-        $this->menu_title = esc_html__('Adas-divi-Db-Addon', 'adasdividb');
+        $this->menu_title = esc_html__('Adas divi Settings', 'adasdividb');
         $this->capability = 'manage_options';
         $this->menu_slug = 'khdiviwplist.php';
 
@@ -172,7 +172,7 @@ class Adas_Divi_Settings
         // MultiSelect field --------------------------------------------------.
         add_settings_field(
             'divi_form_id_setting',
-            __('<span class="label_setting">divi\' Form id', 'adasdividb'),
+            __('<span class="label_setting">Divi\' Form ID', 'adasdividb'),
             array($this, 'multiselect1_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -186,7 +186,7 @@ class Adas_Divi_Settings
         // Number of entries in page --------------------------------------------------.
         add_settings_field(
             'items_per_page',
-            __('<span class="label_setting">Number of entries per Page', 'adasdividb'),
+            __('<span class="label_setting">Entries Per Page', 'adasdividb'),
             array($this, 'number_page_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -203,7 +203,7 @@ class Adas_Divi_Settings
         // Checkbox field -----------------------------------------------------.
         add_settings_field(
             'Enable_data_saving_checkbox',
-            __('<span class="label_setting">Pause Data saving', 'adasdividb'),
+            __('<span class="label_setting"><i class="far fa-pause-circle"></i> Data Saving', 'adasdividb'),
             array($this, 'checkbox1_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -265,7 +265,7 @@ class Adas_Divi_Settings
         // bg Color for export button --------------------------------------------------------.
         add_settings_field(
             'khdivi_exportbg_color',
-            __('<span class="label_setting">Export button bg Color', 'adasdividb'),
+            __('<span class="label_setting">Export Button Background Color', 'adasdividb'),
             array($this, 'color_exportbg_html'),
             $this->menu_slug,
             'cliowp_settings_page_section2'
@@ -316,14 +316,12 @@ class Adas_Divi_Settings
 
         $form_id = get_option('divi_form_id_setting');
 
-        if (empty($results_formids)) {
-            printf(__('It appears that there are no form entries detected. Please add a form using the divi plugin and submit at least one form.'));
+        if (!$is_divi_active) {
+            // The plugin is not activated
+            printf(' <br>Divi THEME IS NOT ACTIVE!!');
+        }
 
-            if ($is_divi_active) {
-                // The plugin is not activated
-                printf(' <br>DIVI THEME IS NOT ACTIVE!!');
-            }
-        } else {
+       else {
             echo '<div class="form-field">';
             echo '<select  name="divi_form_id_setting" id="divi_form_id_setting">';
             // Initialize an empty array to store form_id values
@@ -382,8 +380,10 @@ class Adas_Divi_Settings
 
         if (!$is_divi_active) {
             // The plugin is not activated
-            printf(' <h1 class="warning-text">DIVI Theme is not active!</h1>');
-        }
+            printf('<div class="warning-text">Divi Theme is not active! <i class="far fa-exclamation-triangle"></i></div>');        }
+
+      
+       
 
         if (count($results_formids) > 0) {
             $selected_values = get_option('divi_form_id_setting');

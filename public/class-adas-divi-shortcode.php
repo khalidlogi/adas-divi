@@ -55,9 +55,9 @@ class Adas_Divi_Shortcode
         if (strtoupper($key) === 'ADMIN_NOTE') {
             echo '<span class="value" style="color: red; font-weight:bold;">' . esc_html(strtoupper($value)) . '</span>';
         } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            echo '<a href="mailto:' . $value . '">' . $value . '</a>';
+            echo '<a class="adaslink" href="mailto:' . $value . '">' . $value . '</a>';
         } elseif (is_numeric($value)) {
-            echo '<a href="https://wa.me/' . $value . '">' . $value . '</a>';
+            echo '<a class="adaslink" href="https://wa.me/' . $value . '">' . $value . '</a>';
         } else {
             echo '<span style="color:' . $this->khdivi_text_color . ';" class="value">' . esc_html($value) . '</span>';
         }
@@ -129,8 +129,7 @@ class Adas_Divi_Shortcode
 
                 if ($form_values) {
                     echo '<div class="khcontainer">';
-                    echo 'Number of forms submitted: ' . class_divi_KHdb::getInstance()->count_items($formbyid) . '<br>';
-                    echo 'Number of entries per page: ' . $this->items_per_page;
+                    echo 'Number of forms submitted: ' . class_divi_KHdb::getInstance()->count_items($formbyid) . '';
 
                     if (!empty($formbyid)) {
                         echo '<br> Default form id: <span style="color:blue;">' . (($formbyid === '1') ? 'Show all forms' : $formbyid) . '</span>';
@@ -138,7 +137,7 @@ class Adas_Divi_Shortcode
                
                      // Start table
                     echo '<div class="form-data-container">';
-                    echo '<table style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
+                    echo '<table id="adastable" style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
 
                     // Table header
                     echo '<tr>';

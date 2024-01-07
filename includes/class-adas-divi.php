@@ -72,8 +72,8 @@ class Adas_Divi
 
 
 
-		if (defined('ADAS_DIVI_VERSION')) {
-			$this->version = ADAS_DIVI_VERSION;
+		if (defined('ADAS_Divi_VERSION')) {
+			$this->version = ADAS_Divi_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -207,6 +207,7 @@ class Adas_Divi
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		//$this->loader->add_filter('admin_notices', $plugin_admin, 'admin_notice_installed');
 
 	}
 

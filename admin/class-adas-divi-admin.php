@@ -70,6 +70,7 @@ class Adas_Divi_Admin
 
 	}
 
+  
 	/**
 	 * Register the JavaScript for the admin area.
 	 *

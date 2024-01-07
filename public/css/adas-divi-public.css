@@ -7,6 +7,9 @@
   font-family: Arial, sans-serif;
 }
 
+table#adastable{
+  position: relative;
+}
 /* Styling for each set of form values */
 .form-set-khcontainer {
   background-color: #f7f7f7;
@@ -16,7 +19,14 @@
   padding: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+a.adaslink {
+  color: inherit;
+  text-decoration: none;
+}
 
+a.adaslink {
+  text-decoration: underline;
+}
 
 /* Styling for form_id */
 .form-id-label,
@@ -265,11 +275,18 @@ button.dismiss-btn {
 }
 
 .delete-edit-wraper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  right: 5px;
+  top: 8px;
   text-align: center;
-  background: #c3bbbb4f;
-  border: 1px solid gray;
-  width: 154px;
-  border-radius: 21px;
-  padding: 4px;
-  margin: 0 auto;
+
+  padding: 5px;
+  /* margin: 0 auto; */
+}
+
+button.deletebtn {
+  margin: 8px;
 }

@@ -67,7 +67,9 @@ class Adas_Divi_Activator
 
 
 	if ( !$is_divi_active ) {
-		deactivate_plugins( basename( __FILE__ ) );
+		add_action('admin_notices', 'my_plugin_divi_theme_not_active_notice');
+
+		/*deactivate_plugins( basename( __FILE__ ) );
 		wp_die(
 			'<p>' .
 			sprintf(
@@ -75,7 +77,14 @@ class Adas_Divi_Activator
 				$php
 			)
 			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
-		);
+		);*/
+	}
+	function my_plugin_divi_theme_not_active_notice() {
+		//if (!is_plugin_active('divi/divi.php')) {
+			echo '<div class="notice notice-error">
+					<p>' . __('The Divi theme is not active. Please activate the Divi theme to use this plugin.', 'my_plugin') . '</p>
+				  </div>';
+		//}
 	}
 	
 	if ( version_compare( PHP_VERSION, $php, '<' ) ) {
