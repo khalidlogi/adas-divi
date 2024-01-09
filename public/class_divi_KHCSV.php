@@ -33,7 +33,6 @@ if (!class_exists('class_divi_KHCSV')) {
 
             // Call the getDate() method
             //$datecsv = class_divi_KHdb::getInstance()->getDate();
-
             // Start building the CSV table
             //$csv_table = "Date: $datecsv\n";
             $csv_table = "ID, Form ID, Field, Value\n";

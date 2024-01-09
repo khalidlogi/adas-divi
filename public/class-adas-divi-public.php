@@ -23,7 +23,6 @@
  */
 class Adas_Divi_Public
 {
-
 	
 	private $table_name;
 
@@ -109,6 +108,13 @@ class Adas_Divi_Public
 
 	}
 
+	// 
+	/**
+	 * Delete row by ID
+	 *
+	 * @return void
+	 *
+	 */
 	function delete_form_row()
 	{
 		global $wpdb;
@@ -213,14 +219,14 @@ class Adas_Divi_Public
 	{
 
 		global $wpdb;
+		
 		if ($et_contact_error === true) {
 			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
-
 			return;
 		}
 
 		// Serialize the array data
-		$form_values = serialize($processed_fields_values);
+		$form_values = wp_unslash(serialize($processed_fields_values));
 		$page_id = get_the_ID();
 
 		// page submitted on details
@@ -236,7 +242,7 @@ class Adas_Divi_Public
 		$wpdb->insert(
 			$this->table_name,
 			array(
-				'form_values' => $form_values,
+				'form_values' => strip_tags($form_values),
 				'page_id' => $page_id,
 				'page_name' => $page_name,
 				'page_url' => $page_url,

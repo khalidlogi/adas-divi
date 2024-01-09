@@ -15,14 +15,16 @@ class Adas_Divi_Shortcode
 
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'divi_table';
-
+        //get the form id 
+        $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
+        // get the number of forms
+        $this->formCount = class_divi_KHdb::getInstance()->count_items($this->formbyid);
 
         $options = [
             'khdivi_label_color' => '#bfa1a1',
             'khdivi_text_color' => null,
             'khdivi_exportbg_color' => '#408c4f',
             'khdivi_bg_color' => '#f8f7f7',
-            'khdivi_exportbg_color' => '#408c4f',
             'items_per_page' => 10,
         ];
 
@@ -30,13 +32,7 @@ class Adas_Divi_Shortcode
             $value = get_option($option, $default);
             $this->{$option} = $value;
         }
-
-        //get the form id 
-        $this->formbyid = class_divi_KHdb::getInstance()->retrieve_form_id();
-
-        // get the number of forms
-        $this->formCount = class_divi_KHdb::getInstance()->count_items($this->formbyid);
-
+    
         add_action('init', [&$this, 'init']);
 
     }
@@ -44,15 +40,21 @@ class Adas_Divi_Shortcode
     public function init()
     {
         // Add Shortcodes
-        add_shortcode('divi_data', [&$this, 'display_form_values_shortcode_table']);
+        add_shortcode('adas_divi', [&$this, 'display_form_values_shortcode_table']);
 
     }
 
 
-    function display_value($value, $key)
+    /**
+     * Display the formatted value based on the key
+     * @param mixed $value The value to be displayed
+     * @param string $key The key associated with the value
+     */
+     function display_value($value, $key)
     {
 
-        if (strtoupper($key) === 'ADMIN_NOTE') {
+        $value = wp_unslash($value);
+         if (strtoupper($key) === 'ADMIN_NOTE') {
             echo '<span class="value" style="color: red; font-weight:bold;">' . esc_html(strtoupper($value)) . '</span>';
         } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
             echo '<a class="adaslink" href="mailto:' . $value . '">' . $value . '</a>';
@@ -63,12 +65,17 @@ class Adas_Divi_Shortcode
         }
 
     }
+
+    /**
+     * Display the form values as a shortcode table
+     * @param array $atts Shortcode attributes
+     * @return string The formatted form values table
+     */
     function display_form_values_shortcode_table($atts)
     {
 
         global $wpdb;
         $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
-
 
         // Check if the table exists
        if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") != $this->table_name) {
@@ -134,33 +141,28 @@ class Adas_Divi_Shortcode
                     if (!empty($formbyid)) {
                         echo '<br> Default form id: <span style="color:blue;">' . (($formbyid === '1') ? 'Show all forms' : $formbyid) . '</span>';
                     }
-               
-                     // Start table
+               // Start table
                     echo '<div class="form-data-container">';
-                    echo '<table id="adastable" style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';>';
+                    echo '<table style="border: 1px solid black; background:' . $this->khdivi_bg_color . ';">';
 
                     // Table header
                     echo '<tr>';
                     echo '<th>ID</th>';
-                    echo '<th>Form ID</th>';
-                    echo '<th>Data</th>';
+                    echo '<th>Entries</th>';
+                    echo '<th>Date</th>';
                     echo '</tr>';
-                    
                     foreach ($form_values as $form_value) {
-
                         $form_id = ($form_value['contact_form_id']);
+                        $form_id = 'Form_ID_'.preg_replace('/\D/', '', $form_id);
                         $id = intval($form_value['id']);
                         $date = $form_value['date'];
     
                         // Table row
                         echo '<tr style="border: .5px solid black;" >';
-                        echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $id . '</td>';
-                        echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
-                        echo '<td width="80%" style="border: 1px solid black;">';
-                        echo '<span style="color:' . $this->khdivi_label_color . ';">Date:</span> 
-                        <span style="color:' . $this->khdivi_text_color . ';">' . $date . ' </span>';
-    
-    
+                        echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
+                        //echo '<td style="border: 1px solid black;  padding: 10px; text-align: center;">' . $form_id . '</td>';
+                        echo '<td class="idtd" width="80%" style="border: 1px solid black;">';
+                              
                         // Table data
                         foreach ($form_value['data'] as $key => $value) {
     
@@ -171,6 +173,7 @@ class Adas_Divi_Shortcode
                             echo '<div>';
                             echo '<span id="datakey" style="color:' . $this->khdivi_label_color . ';">' . $key . ': </span>';
     
+                            
                             if (is_array($value)) {
                                 if (array_key_exists('value', $value)) {
                                     $this->display_value($value['value'], $key);
@@ -194,11 +197,11 @@ class Adas_Divi_Shortcode
                         class="fas fa-edit"></i></button>';
                         echo '</div>';
                         echo '</td>';
+                        echo '<td style="border: .5px solid black;  padding: 10px; text-align: center;">' . $date . '</td>';
+
                         echo '</tr>';
                     }
                 }
-               
-
                 
                 echo '</table>';
                 echo '<div class="pagination-links">';

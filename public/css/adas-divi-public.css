@@ -274,17 +274,18 @@ button.dismiss-btn {
   position: relative;
 }
 
-.delete-edit-wraper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  right: 5px;
-  top: 8px;
-  text-align: center;
 
+
+.delete-edit-wraper {
+
+  position: sticky;
+  right: 11px;
+  top: 36px;
+  float: right;
+  text-align: center;
   padding: 5px;
-  /* margin: 0 auto; */
+  margin-top: -25px;
+  opacity: 0.7;
 }
 
 button.deletebtn {

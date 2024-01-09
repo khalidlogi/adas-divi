@@ -82,7 +82,7 @@ class Adas_Divi_Settings
 
 
         // parameters.
-        $this->page_title = esc_html__('Adas divi Database Add-on | shortcode: [divi_data]', 'adasdividb');
+        $this->page_title = esc_html__('Adas Divi Database Add-on | shortcode: [adas_divi]', 'adasdividb');
         $this->menu_title = esc_html__('Adas divi Settings', 'adasdividb');
         $this->capability = 'manage_options';
         $this->menu_slug = 'khdiviwplist.php';
