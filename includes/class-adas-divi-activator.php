@@ -24,11 +24,7 @@ class Adas_Divi_Activator
 {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
+	 * Create Db on activation 
 	 */
 	public static function activate()
 	{
@@ -61,21 +57,16 @@ class Adas_Divi_Activator
 	global $wp_version;
 	$is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
 
-
 	$php = '5.3';
 	$wp  = '3.8';
 
-
 	if ( !$is_divi_active ) {
-		deactivate_plugins( basename( __FILE__ ) );
-		wp_die(
-			'<p>' .
-			sprintf(
-				__( 'Divi Theme is not ACTIVE. Please Activate the theme and try again!', 'my_plugin' ),
-				$php
-			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
-		);
+		add_action('admin_notices', 'adas_divi_theme_not_active_notice');
+	}
+	function adas_divi_theme_not_active_notice() {
+			echo '<div class="notice notice-error">
+					<p>' . __('The Divi theme is not active. Please activate the Divi theme to use this plugin.', 'adasdividb') . '</p>
+				  </div>';
 	}
 	
 	if ( version_compare( PHP_VERSION, $php, '<' ) ) {
@@ -83,10 +74,10 @@ class Adas_Divi_Activator
 		wp_die(
 			'<p>' .
 			sprintf(
-				__( 'This plugin can not be activated because it requires a PHP version greater than %1$s. Your PHP version can be updated by your hosting company.', 'my_plugin' ),
+				__( 'This plugin can not be activated because it requires a PHP version greater than %1$s. Your PHP version can be updated by your hosting company.', 'adasdividb' ),
 				$php
 			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
+			. '</p> <a href="' . esc_url(admin_url( 'plugins.php' )) . '">' . __( 'go back', 'adasdividb' ) . '</a>'
 		);
 	}
 
@@ -95,10 +86,10 @@ class Adas_Divi_Activator
 		wp_die(
 			'<p>' .
 			sprintf(
-				__( 'This plugin can not be activated because it requires a WordPress version greater than %1$s. Please go to Dashboard &#9656; Updates to gran the latest version of WordPress .', 'my_plugin' ),
+				__( 'This plugin can not be activated because it requires a WordPress version greater than %1$s. Please go to Dashboard &#9656; Updates to gran the latest version of WordPress .', 'adasdividb' ),
 				$php
 			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'go back', 'my_plugin' ) . '</a>'
+			. '</p> <a href="' .  esc_url(admin_url( 'plugins.php' )) . '">' . __( 'go back', 'adasdividb' ) . '</a>'
 		);
 	}
 }

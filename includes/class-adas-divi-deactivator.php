@@ -23,11 +23,7 @@
 class Adas_Divi_Deactivator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
+	 * deactivate function
 	 */
 	public static function deactivate() {
 

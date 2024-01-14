@@ -6,7 +6,9 @@ defined('ABSPATH') || exit;
 class EnqueueClass
 {
 
-    public function __construct()
+    /**
+     * Enqueue styles 
+     */public function __construct()
     {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_form_values_css'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_custom_script'));
@@ -16,8 +18,6 @@ class EnqueueClass
 
     /**
      * Styles for Dashboard
-     *
-     * @return void
      */
     function admin_styles()
     {
@@ -28,12 +28,12 @@ class EnqueueClass
 
     }
 
+
     /**
      * Enqueue CSS styles for the form values.
      */
     function enqueue_form_values_css()
     {
-
         // Enqueue your custom CSS.
         wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . '../assets/css/font-awesome.css');
 
@@ -55,7 +55,7 @@ class EnqueueClass
         // Enqueue jQuery UI scripts (core and droppable) (optional).
         wp_enqueue_script('jquery-ui-core', plugin_dir_url(__FILE__) . '../assets/js/jquery-ui-core', array('jquery'), '1.0', true);
         wp_enqueue_script('jquery-ui-droppable');
-      
+
     }
 
 }

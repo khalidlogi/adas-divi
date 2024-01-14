@@ -126,8 +126,6 @@ class Adas_Divi_Loader
 
 	/**
 	 * Register the filters and actions with WordPress.
-	 *
-	 * @since    1.0.0
 	 */
 	public function run()
 	{

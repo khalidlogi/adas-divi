@@ -23,34 +23,14 @@
  */
 class Adas_Divi_Public
 {
-
 	
 	private $table_name;
-
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
 	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
 	private $version;
+
 
 	/**
 	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct($plugin_name, $version)
 	{
@@ -62,16 +42,13 @@ class Adas_Divi_Public
 
 	}
 
+	
 	/**
 	 * Retrieve and return form values
-	 *
-	 * @return  array $fields
-	 *
 	 */
 	function get_form_values()
 	{
 		global $wpdb;
-		$form_id = sanitize_text_field($_POST['form_id']);
 		$id = intval($_POST['id']);
 
 		// Fetch form_value from the wpform_db2 table based on the form_id
@@ -109,10 +86,13 @@ class Adas_Divi_Public
 
 	}
 
+
+	/**
+	 * Delete row by ID
+	 */
 	function delete_form_row()
 	{
 		global $wpdb;
-		//error_log('function delete_form_row() ');
 		$id = intval($_POST['id']);
 
 		if (!$id) {
@@ -120,7 +100,7 @@ class Adas_Divi_Public
 			exit;
 		}
 		// Check permissions
-		if (!current_user_can('delete_posts')) {
+		if (!current_user_can('manage_options')) {
 			wp_send_json_error('Insufficient permissions');
 			exit;
 		}
@@ -138,24 +118,19 @@ class Adas_Divi_Public
 					$id
 				)
 			);
-
-			// Log success
 			wp_send_json_success("Entry with ID $id deleted successfully");
+
 		} catch (Exception $e) {
-			error_log("Error deleting entry: {$e->getMessage()}");
-			
+			error_log("Error deleting entry: {$e->getMessage()}");		
 		}
 
 		wp_send_json_success('Error while deleting ."' . $id . '"');
-
 		exit;
 	}
 
 
 	/**
 	 *  Update form values
-	 *
-	 * @return void
 	 */
 	function update_form_values()
 	{
@@ -163,7 +138,6 @@ class Adas_Divi_Public
 		global $wpdb;
 		// Retrieve the serialized form data from the AJAX request
 		$form_data = sanitize_text_field($_POST['formData']);
-		$form_id = sanitize_text_field($_POST['contact_form_id']);
 		$id = intval($_POST['id']);
 
 		// Parse the serialized form data
@@ -175,7 +149,7 @@ class Adas_Divi_Public
 		}
 
 		// Check permissions
-		if (!current_user_can('delete_posts')) {
+		if (!current_user_can('manage_options')) {
 			wp_send_json_error('Insufficient permissions');
 			exit;
 		}
@@ -202,25 +176,22 @@ class Adas_Divi_Public
 
 	}
 
+
 	/**
-	 *Save entry when a Divi form is submitted
-	 *
-	 * @param array $processed_fields_values	Processed fields values
-	 * @param array $et_contact_error	 		Whether there is an error on the form entry submit process or not
-	 * @param array $contact_form_info	 		An array of post row actions.
+	 * Save entry when a Divi form is submitted
 	 */
 	function add_new_post($processed_fields_values, $et_contact_error, $contact_form_info)
 	{
 
 		global $wpdb;
+		
 		if ($et_contact_error === true) {
 			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
-
 			return;
 		}
 
 		// Serialize the array data
-		$form_values = serialize($processed_fields_values);
+		$form_values = (serialize($processed_fields_values));
 		$page_id = get_the_ID();
 
 		// page submitted on details
@@ -236,7 +207,7 @@ class Adas_Divi_Public
 		$wpdb->insert(
 			$this->table_name,
 			array(
-				'form_values' => $form_values,
+				'form_values' => ($form_values),
 				'page_id' => $page_id,
 				'page_name' => $page_name,
 				'page_url' => $page_url,
@@ -258,24 +229,22 @@ class Adas_Divi_Public
 		);
 	}
 
+	
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
 	 */
 	public function enqueue_styles()
 	{
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-public.css', array(), $this->version, 'all');
 	}
+	
 	/**
 	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
 	 */
 	public function enqueue_scripts()
 	{
 
-		//wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-public.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-public.js', array('jquery'), $this->version, false);
 
 	}
 

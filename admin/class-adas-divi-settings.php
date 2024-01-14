@@ -5,73 +5,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
-/**
- * ClioWP Settings Page plugin main class
- *
- */
 class Adas_Divi_Settings
 {
 
-    private $mydb;
-    private $view_options;
-    private $mysetts;
-    private $table_name;
-
-    private $mylink;
-    private $text_color;
-    private $label_color;
-    private $bgcolor;
-    private $formbyid;
-    private $exportbgcolor;
-    private $items_per_page;
-
-    private $formCount;
-
-
-
-
-    /**
-     * Settings Page title.
-     *
-     * @var string
-     */
     private $page_title;
-
-    /**
-     * Menu title.
-     *
-     * @var string
-     */
     private $menu_title;
-
-    /**
-     * Capability to access Settings page.
-     *
-     * @var string
-     */
     private $capability;
-
-    /**
-     * Menu slug.
-     *
-     * @var string
-     */
     private $menu_slug;
-
-    /**
-     * Settings form action.
-     *
-     * @var string
-     */
     private $form_action;
-
-    /**
-     * Option group.
-     *
-     * @var string
-     */
     private $option_group;
+
 
     /**
      * Constructor
@@ -79,23 +22,17 @@ class Adas_Divi_Settings
     public function __construct()
     {
 
-
-
         // parameters.
-        $this->page_title = esc_html__('Adas divi Database Add-on | shortcode: [divi_data]', 'adasdividb');
-        $this->menu_title = esc_html__('Adas-divi-Db-Addon', 'adasdividb');
+        $this->page_title = esc_html__('Adas Divi Database Add-on | shortcode: [adas]', 'adasdividb');
+        $this->menu_title = esc_html__('Adas', 'adasdividb');
         $this->capability = 'manage_options';
         $this->menu_slug = 'khdiviwplist.php';
-
         $this->form_action = 'options.php';
-
         $this->option_group = 'adasdividb_sp_plugin';
 
         // actions.
         add_action('admin_menu', array($this, 'add_settings_page'));
         add_action('admin_init', array($this, 'add_settings'));
-
-
     }
 
 
@@ -123,6 +60,7 @@ class Adas_Divi_Settings
             array($this, 'settings_page_html')
         );
     }
+
 
     /**
      * Compose settings
@@ -156,23 +94,11 @@ class Adas_Divi_Settings
             $this->menu_slug
         );
 
-        // Input text field ---------------------------------------------------.
-
-        /**
-         * Adds a new field to a section of a settings page.
-         */
-
-
-        /**
-         * Registers a setting and its data.
-         * 
-         */
-
 
         // MultiSelect field --------------------------------------------------.
         add_settings_field(
             'divi_form_id_setting',
-            __('<span class="label_setting">divi\' Form id', 'adasdividb'),
+            __('<span class="label_setting">Divi\' Form ID', 'adasdividb'),
             array($this, 'multiselect1_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -186,7 +112,7 @@ class Adas_Divi_Settings
         // Number of entries in page --------------------------------------------------.
         add_settings_field(
             'items_per_page',
-            __('<span class="label_setting">Number of entries per Page', 'adasdividb'),
+            __('<span class="label_setting">Entries Per Page', 'adasdividb'),
             array($this, 'number_page_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -203,7 +129,7 @@ class Adas_Divi_Settings
         // Checkbox field -----------------------------------------------------.
         add_settings_field(
             'Enable_data_saving_checkbox',
-            __('<span class="label_setting">Pause Data saving', 'adasdividb'),
+            __('<span class="label_setting"> Data Saving', 'adasdividb'),
             array($this, 'checkbox1_html'),
             $this->menu_slug,
             'cliowp_settings_page_section1'
@@ -265,7 +191,7 @@ class Adas_Divi_Settings
         // bg Color for export button --------------------------------------------------------.
         add_settings_field(
             'khdivi_exportbg_color',
-            __('<span class="label_setting">Export button bg Color', 'adasdividb'),
+            __('<span class="label_setting">Export Button Background Color', 'adasdividb'),
             array($this, 'color_exportbg_html'),
             $this->menu_slug,
             'cliowp_settings_page_section2'
@@ -279,69 +205,11 @@ class Adas_Divi_Settings
             )
         );
 
-
     }
 
 
     /**
-     * Sanitize input1
-     *
-     * @param string $input The input value.
-     */
-    public function sanitize_input1($input)
-    {
-        if (true === empty(trim($input))) {
-            add_settings_error(
-                'cliowp_sp_input1',
-                'cliowp_sp_input1_error',
-                esc_html__('Input1 cannot be empty', 'adasdividb'),
-            );
-            return get_option('cliowp_sp_input1');
-        }
-
-        return sanitize_text_field($input);
-    }
-
-    /**
-     * Create HTML for number1 field
-     *
-     * @param array $args Arguments passed.
-     */
-    function number1_html()
-    {
-        global $wpdb;
-        $table_name = 'divi_table';
-        $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
-        $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
-
-        $form_id = get_option('divi_form_id_setting');
-
-        if (empty($results_formids)) {
-            printf(__('It appears that there are no form entries detected. Please add a form using the divi plugin and submit at least one form.'));
-
-            if ($is_divi_active) {
-                // The plugin is not activated
-                printf(' <br>DIVI THEME IS NOT ACTIVE!!');
-            }
-        } else {
-            echo '<div class="form-field">';
-            echo '<select  name="divi_form_id_setting" id="divi_form_id_setting">';
-            // Initialize an empty array to store form_id values
-            foreach ($results_formids as $row) {
-                $selected = ($row->contact_form_id == $form_id) ? 'selected' : '';
-                echo '<option value="' . esc_attr($row->contact_form_id) . '" ' . $selected . '>' . esc_html($row->contact_form_id) . '</option>';
-
-            }
-            $selected_all = ($form_id == '1') ? 'selected' : '';
-            echo '<option value="1" ' . $selected_all . '>All forms</option>';
-            echo '</select>';
-            echo '</div>';
-        }
-
-    }
-
-    /**
-     * Create HTML for checkbox1 field
+     * Create HTML for Enable_data_saving_checkbox field
      */
     public function checkbox1_html()
     {
@@ -351,11 +219,10 @@ class Adas_Divi_Settings
         <input class="form-control Enable_data_saving_checkbox" type="checkbox" name="Enable_data_saving_checkbox"
         value="1" <?php checked( 1, $value ); ?>
          >
-<?php    }
+        <?php    
+    }
     
     
-
-
     /**
      * Create HTML for Notification checkbox field
      */
@@ -368,7 +235,6 @@ class Adas_Divi_Settings
     }
 
 
-
     /**
      * Create HTML for multiselect1 field
      */
@@ -376,21 +242,20 @@ class Adas_Divi_Settings
     {
         global $wpdb;
         $is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
-
         $table_name = $wpdb->prefix . 'divi_table';
         $results_formids = $wpdb->get_results("SELECT DISTINCT contact_form_id FROM $table_name");
 
         if (!$is_divi_active) {
             // The plugin is not activated
-            printf(' <h1 class="warning-text">DIVI Theme is not active!</h1>');
-        }
+            $message = __('Divi Theme is not active!', 'adasdividv');
+            printf(
+                '<div class="warning-text">%s <i class="far fa-exclamation-triangle"></i></div>',
+                esc_html($message)
+            );        }
 
         if (count($results_formids) > 0) {
             $selected_values = get_option('divi_form_id_setting');
-            ?>
 
-            <?php
-            //esc_attr_e('<h1><</h1>', 'adasdividb');
             $message = sprintf(esc_html__('To select multiple IDs, press and hold the Ctrl button while selecting IDs.'));
             $html_message = sprintf('<div class="information-text">%s</div>', wpautop($message));
             echo wp_kses_post($html_message); ?>
@@ -417,21 +282,18 @@ class Adas_Divi_Settings
         }
     }
 
+    
     /**
      * Utility function to check if value is selected
-     *
-     * @param array|string $selected_values Array (or empty string) returned by get_option().
-     * @param string       $current_value Value to check if it is selected.
-     *
-     * @return string
      */
     private function cliowp_multiselected($selected_values, string $current_value): string
     {
+
         if (is_array($selected_values) && in_array($current_value, $selected_values, true)) {
             return 'selected';
         }
-
         return '';
+
     }
 
 
@@ -445,6 +307,7 @@ class Adas_Divi_Settings
         <?php
     }
 
+
     /**
      * Create HTML for color1 field
      */
@@ -455,6 +318,7 @@ class Adas_Divi_Settings
         <?php
     }
 
+
     /**
      * Create HTML for label color field
      */
@@ -464,6 +328,7 @@ class Adas_Divi_Settings
         <input type="color" name="khdivi_label_color" value="<?php echo esc_attr(get_option('khdivi_label_color')); ?>">
         <?php
     }
+
 
     /**
      * Create HTML for label color field
@@ -476,14 +341,12 @@ class Adas_Divi_Settings
     }
 
 
-
     /**
      * Create Settings Page HTML
      */
     public function settings_page_html()
     {
         ?>
-
         <div class="wrap">
             <h1>
                 <?php echo esc_attr($this->page_title); ?>
@@ -496,24 +359,9 @@ class Adas_Divi_Settings
                 ?>
             </form>
         </div>
-
         <?php
     }
 
-    /**
-     * Loads plugin's translated strings.
-     */
-    public function load_languages()
-    {
-        /**
-         * Params of load_plugin_textdomain
-         */
-        load_plugin_textdomain(
-            'adasdividb',
-            false,
-            dirname(plugin_basename(__FILE__)) . '/languages'
-        );
-    }
 }
 
 $cliowp_settings_page = new Adas_Divi_Settings();

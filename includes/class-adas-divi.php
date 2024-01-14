@@ -14,14 +14,6 @@
  */
 
 /**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
  * @since      1.0.0
  * @package    Adas_Divi
  * @subpackage Adas_Divi/includes
@@ -39,47 +31,22 @@ class Adas_Divi
 	 * @var      Adas_Divi_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
-
-	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-	 */
 	protected $plugin_name;
-
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
 	protected $version;
+	
 
 	/**
 	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
-	 *
-	 * @since    1.0.0
 	 */
 	public function __construct()
 	{
 
-
-
-		if (defined('ADAS_DIVI_VERSION')) {
-			$this->version = ADAS_DIVI_VERSION;
+		if (defined('ADAS_Divi_VERSION')) {
+			$this->version = ADAS_Divi_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-
 		$this->plugin_name = 'adas-divi';
-
 		$this->load_dependencies();
 		$this->setup_constants();
 		$this->set_locale();
@@ -88,10 +55,8 @@ class Adas_Divi
 
 	}
 
-
 	private function setup_constants()
 	{
-
 		// Plugin version.
 		if (!defined('KHFORM_DOMAIN')) {
 			define('KHFORM_DOMAIN', 'khwpformsdb');
@@ -105,26 +70,12 @@ class Adas_Divi
 		if (!defined('KHFORM_PATH')) {
 			define('KHFORM_PATH', plugin_dir_path(__FILE__));
 		}
-
 	
 	}
 
 
 	/**
 	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - Adas_Divi_Loader. Orchestrates the hooks of the plugin.
-	 * - Adas_Divi_i18n. Defines internationalization functionality.
-	 * - Adas_Divi_Admin. Defines all hooks for the admin area.
-	 * - Adas_Divi_Public. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
 	 */
 	private function load_dependencies()
 	{
@@ -145,41 +96,26 @@ class Adas_Divi
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-settings.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-KHwidget.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/adas-enqueue.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-public.php';
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-adas-divi-shortcode.php';
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHdb.php';
-
-		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-settings.php';
-
-		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/adas-enqueue.php';
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHPDF.php';
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class_divi_KHCSV.php';
-
-		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-adas-divi-KHwidget.php';
-
-
-
 		$this->loader = new Adas_Divi_Loader();
 
 	}
 
+	
 	/**
 	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Adas_Divi_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
 	 */
 	private function set_locale()
 	{
@@ -191,31 +127,22 @@ class Adas_Divi
 	}
 
 
-
 	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
 	 */
 	private function define_admin_hooks()
 	{
 
 		$plugin_admin = new Adas_Divi_Admin($this->get_plugin_name(), $this->get_version());
-
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
 	}
+
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
 	 */
 	private function define_public_hooks()
 	{
@@ -227,7 +154,6 @@ class Adas_Divi
 
 		// Activate if enabled
 		$isdataenabled = get_option('Enable_data_saving_checkbox');
-
 
 		if ($isdataenabled !== '1') {
 			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
@@ -248,38 +174,30 @@ class Adas_Divi
 
 		new Adas_Divi_Shortcode();
 
-
 	}
-
 
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
 	 */
 	public function run()
 	{
 		$this->loader->run();
 	}
 
+
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
 	 */
 	public function get_plugin_name()
 	{
 		return $this->plugin_name;
 	}
 
+
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Adas_Divi_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader()
 	{
@@ -288,9 +206,6 @@ class Adas_Divi
 
 	/**
 	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
 	 */
 	public function get_version()
 	{

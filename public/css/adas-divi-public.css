@@ -7,6 +7,9 @@
   font-family: Arial, sans-serif;
 }
 
+table#adastable{
+  position: relative;
+}
 /* Styling for each set of form values */
 .form-set-khcontainer {
   background-color: #f7f7f7;
@@ -16,7 +19,14 @@
   padding: 15px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+a.adaslink {
+  color: inherit;
+  text-decoration: none;
+}
 
+a.adaslink {
+  text-decoration: underline;
+}
 
 /* Styling for form_id */
 .form-id-label,
@@ -81,18 +91,7 @@
   font-size: 16px;
   transition: background-color 0.3s ease;
 }
-.export-btn-pdf {
-  display: inline-block;
-  padding: 10px 20px;
-  margin-left: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
+
 
 .export-btn:hover,
 .export-btn-pdf:hover {
@@ -241,6 +240,7 @@ button.dismiss-btn {
 
 .pagination-links {
   margin: 7px 0px;
+  margin-left: 10px
 }
 
 .pagination-links a {
@@ -260,16 +260,57 @@ button.dismiss-btn {
 .form-set-container {
   border: 1px solid #ddd;
   padding: 20px;
-  margin-bottom: 20px;
   position: relative;
 }
 
-.delete-edit-wraper {
+
+button.deletebtn {
+  margin: 8px;
+}
+
+@media (max-width: 767px) {
+  td.idtd {
+    border-top: 1px solid #eee;
+    padding: 3px 9px!important;
+  }
+}
+
+th#adastdid {
   text-align: center;
-  background: #c3bbbb4f;
-  border: 1px solid gray;
-  width: 154px;
-  border-radius: 21px;
-  padding: 4px;
-  margin: 0 auto;
+}
+.adasnumber {
+  color: #2f3032;
+  font-family: "Inter-hosted";
+  font-weight: normal;
+  text-transform: uppercase;
+  font-style: normal;
+  text-decoration: none;
+  line-height: 1em;
+  letter-spacing: 0px;
+}
+
+.adassharebutton {
+  display: flex;
+  margin-top: 5px;
+}
+
+.export-btn {
+  background: #408c4f;
+  color: #fff;
+  padding: 10px 15px;
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .adassharebutton {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button.export-btn {
+    margin: 5px;
+}
+  .export-btn {
+    margin-top: 10px;
+    margin-left: 0;
+  }
 }
