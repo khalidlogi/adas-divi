@@ -46,7 +46,7 @@ class Adas_Divi
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'adas-divi';
+		$this->plugin_name = 'adas';
 		$this->load_dependencies();
 		$this->setup_constants();
 		$this->set_locale();
@@ -57,14 +57,6 @@ class Adas_Divi
 
 	private function setup_constants()
 	{
-		// Plugin version.
-		if (!defined('KHFORM_DOMAIN')) {
-			define('KHFORM_DOMAIN', 'khwpformsdb');
-		}
-		// Plugin version.
-		if (!defined('KHFORM_VERSION')) {
-			define('KHFORM_VERSION', $this->version);
-		}
 
 		// Plugin Folder Path.
 		if (!defined('KHFORM_PATH')) {
@@ -121,6 +113,7 @@ class Adas_Divi
 	{
 
 		$plugin_i18n = new Adas_Divi_i18n();
+		$plugin_i18n->set_domain( $this->get_plugin_name() );
 
 		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 
@@ -157,7 +150,6 @@ class Adas_Divi
 
 		if ($isdataenabled !== '1') {
 			$this->loader->add_action('et_pb_contact_form_submit', $plugin_public, 'add_new_post', 10, 3);
-
 		}
 
 		$this->loader->add_action('wp_ajax_get_form_values', $plugin_public, 'get_form_values');
@@ -169,14 +161,13 @@ class Adas_Divi
 		$this->loader->add_action('wp_ajax_delete_form_row', $plugin_public, 'delete_form_row');
 		$this->loader->add_action('wp_ajax_nopriv_delete_form_row', $plugin_public, 'delete_form_row');
 
-		$this->loader->add_action('wp_ajax_update_send_email', $plugin_public, 'send_email');
-		$this->loader->add_action('wp_ajax_nopriv_send_email', $plugin_public, 'send_email');
-
 		new Adas_Divi_Shortcode();
+
 
 	}
 
 
+	
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 */

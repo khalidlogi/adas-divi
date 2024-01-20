@@ -6,7 +6,6 @@ class Adas_Divi_Shortcode
     private $formbyid;
     private $items_per_page;
     private $formCount;
-    private $option;
 
     public function __construct()
     {
@@ -38,7 +37,6 @@ class Adas_Divi_Shortcode
     public function init()
     {
 
-        // Add Shortcodes
         add_shortcode('adas', [ &$this, 'display_form_values_shortcode_table']);
 
     }
@@ -53,18 +51,11 @@ class Adas_Divi_Shortcode
         if (strtoupper($key) === 'ADMIN_NOTE') {
             printf('<span class="value" style="color: red; font-weight:bold;"> %s</span>', esc_html(strtoupper($value)));
         } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-          
             printf('<a style="color:%s;" class="adaslink" href="mailto:%s"> %s</a>',$this->khdivi_text_color,esc_html($value),esc_html($value));
-
-            //echo '<a style="color:' . $this->khdivi_text_color . ';"  class="adaslink" href="mailto:' . esc_html($value) . '">' . esc_html($value) . '</a>';
         } elseif (is_numeric($value)) {
-            printf(
-                '<a style="color:%s;" class="adaslink" href="https://wa.me/%s"> %s</a>',$this->khdivi_text_color,esc_html($value),esc_html($value)
-            );        
+            printf('<a style="color:%s;" class="adaslink" href="https://wa.me/%s"> %s</a>',$this->khdivi_text_color,esc_html($value),esc_html($value));        
         } else {
-            printf(
-                '<span style="color:%s;" class="value"> %s</span>',$this->khdivi_text_color,esc_attr(stripslashes($value))
-            );        
+            printf('<span style="color:%s;" class="value"> %s</span>',$this->khdivi_text_color,esc_attr(stripslashes($value)));        
         }
 
     }
@@ -109,8 +100,8 @@ class Adas_Divi_Shortcode
             // Check if there is at least one entry
             if (class_divi_KHdb::getInstance()->is_table_empty() === true) {
                 ob_start();
-                $message = __('No data available! Please add entries to your form and try again.', 'adasdividv');
-                $link_text = __('Settings DB', 'adasdividv');
+                $message = __('No data available! Please add entries to your form and try again.', 'adasdividb');
+                $link_text = __('Settings DB', 'adasdividb');
                 $link_url = esc_url(admin_url('admin.php?page=khdiviwplist.php'));
                 
                 $output = sprintf(
@@ -137,29 +128,27 @@ class Adas_Divi_Shortcode
                 echo '
                 <div class="form-wraper">';
                 if (!$is_divi_active) {
-                    $message = __('Divi Theme is not ACTIVE', 'adasdividv');
+                    $message = __('Divi Theme is not ACTIVE', 'adasdividb');
                     printf(
                         '<div style="color:red;"><i class="fas fa-exclamation-circle"></i> %s</div>',
                         esc_html($message)
                     );
                 }
 
-                    $message = __('Visit the <a href="%s">settings page</a> to update the form ID value.<br>', 'adasdividv');
-                    $link_url = esc_url(admin_url('options-general.php?page=khdiviwplist.php'));                  
-                    printf(
-                        $message,
-                        $link_url
-                    );
+                $update_form_id = __('To update the form ID value', 'adasdividb');
+                $settings_page = __('settings page', 'adasdividb');
+                $visit = __('Visit the', 'adasdividb');
+                $link_url = esc_url(admin_url('admin.php?page=khdiviwplist.php'));
+                
+                
+                printf(
+                    $visit . ' <a href="%s">' . $settings_page . '</a> ' . $update_form_id . '.<br>',
+                    $link_url
+                );
                     
                 if ($form_values) {
-                    $message = __('Number of forms submitted: %s', 'adasdividv');
-                    $count = sanitize_text_field(class_divi_KHdb::getInstance()->count_items($formbyid));                   
-                    $output = sprintf(
-                        $message,
-                        $count
-                    );
-                    
-                    echo $output;                    
+                    $count = sanitize_text_field(class_divi_KHdb::getInstance()->count_items($formbyid));
+                    printf('<p>' . __('Number of forms submitted:', 'adasdividb'). ' %s</p>', esc_html($count));                    
                     
                     echo '<div class="form-data-container">';
 
@@ -170,7 +159,7 @@ class Adas_Divi_Shortcode
                         $date = $form_value['date'];
 
                         //Delete button
-                        echo '<div class="form-set-container" style="background:' . $this->khdivi_bg_color . ';"
+                        echo '<div class="form-set-container" style="background:' . esc_attr($this->khdivi_bg_color) . ';"
                         data-id="' . esc_attr($id) . '">';
                         echo '<button class="delete-btn" data-form-id="' . esc_attr($id) . '"
                         data-nonce="' . wp_create_nonce('ajax-nonce') . '">
@@ -182,7 +171,7 @@ class Adas_Divi_Shortcode
 
                         echo '<div class="form-id-container">';
                         
-                        $id_label = __('ID', 'adasdividv');
+                        $id_label = __('ID', 'adasdividb');
                         $id_text = esc_html($id);
                         
                         printf(
@@ -194,18 +183,20 @@ class Adas_Divi_Shortcode
                         );                    
 
                         // Form ID 
-                        $form_id_label = __('Form ID:', 'adasdividv');
+                        $form_id_label = __('Form ID:', 'adasdividb');
                         printf(
                             '<span style="color:%s;" class="form-id-label">%s</span>',
                             $this->khdivi_label_color,
                             $form_id_label
                         );                       
                         
-                        echo '<span style="color:' . $this->khdivi_text_color . ';" class="form-id-value">' . $form_id .
-                            '</span>';
-                        echo '</div>';
-
-                        $date_label = __('Date:', 'adasdividv');
+                        printf(
+                                '<span style="color:%s;" class="form-id-value">%s</span></div>',
+                                $this->khdivi_text_color,
+                                esc_html($form_id)
+                            );    
+                            
+                        $date_label = __('Date:', 'adasdividb');
                         $date_text = esc_html($date);                       
                         printf(
                             '<div id="datakey" style="color:%s;"><span class="field-label"> %s</span><span style="color:%s;" class="value"> %s</span></div>',
@@ -215,7 +206,6 @@ class Adas_Divi_Shortcode
                             $date_text
                         );                       
                         
-
                         // Key values data
                         foreach ($form_value['data'] as $key => $value) {
 
@@ -256,8 +246,8 @@ class Adas_Divi_Shortcode
                     array(
                         'base' => esc_url(add_query_arg('paged', '%#%')),
                         'format' => '',
-                        'prev_text' => __('&laquo; Previous'),
-                        'next_text' => __('Next &raquo;'),
+                        'prev_text' => ('&laquo; Previous'),
+                        'next_text' => ('Next; &raquo'),
                         'total' => $total_pages,
                         'current' => $current_page,
                     )
@@ -267,12 +257,12 @@ class Adas_Divi_Shortcode
                 printf(
                     '<div class="adassharebutton"><button style="background:%s;" class="export-btn">%s</button>',
                     $this->khdivi_exportbg_color,
-                    __('Export as CSV', 'adasdividv')
+                    __('Export as CSV', 'adasdividb')
                 );
                 printf(
                     '<button style="background:%s;" class="export-btn export-btn-pdf">%s</button></div>',
                     $this->khdivi_exportbg_color,
-                    __('Export as PDF', 'adasdividv')
+                    __('Export as PDF', 'adasdividb')
                 );
 
                 return ob_get_clean();

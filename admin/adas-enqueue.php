@@ -10,9 +10,11 @@ class EnqueueClass
      * Enqueue styles 
      */public function __construct()
     {
+
         add_action('wp_enqueue_scripts', array($this, 'enqueue_form_values_css'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_custom_script'));
         add_action('admin_enqueue_scripts', array($this, 'admin_styles'));
+
     }
 
 
@@ -21,10 +23,10 @@ class EnqueueClass
      */
     function admin_styles()
     {
+
         wp_enqueue_style('admin_style', plugin_dir_url(__FILE__) . '../assets/css/admin.css');
         wp_enqueue_style('admin_style', plugin_dir_url(__FILE__) . '../assets/css/bootstrap.min.css');
         wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . '../assets/css/font-awesome.css');
-
 
     }
 
@@ -41,11 +43,13 @@ class EnqueueClass
         wp_enqueue_style('jquery-ui-style', plugin_dir_url(__FILE__) . 'assets/css/jquery-ui.css');
     }
 
+
     /**
      * Enqueue custom JavaScript script.
      */
     function enqueue_custom_script()
     {
+        
         // Enqueue your custom JavaScript.
         wp_enqueue_script('custom-script', plugin_dir_url(__FILE__) . '../assets/js/custom-script.js', array('jquery'), '1.0', true);
 

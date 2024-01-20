@@ -23,7 +23,7 @@
  */
 class Adas_Divi_Public
 {
-	
+
 	private $table_name;
 	private $plugin_name;
 	private $version;
@@ -48,6 +48,7 @@ class Adas_Divi_Public
 	 */
 	function get_form_values()
 	{
+
 		global $wpdb;
 		$id = intval($_POST['id']);
 
@@ -67,9 +68,9 @@ class Adas_Divi_Public
 			foreach ($unserialized_data as $key => $value) {
 				if (is_array($value)) {
 					if (array_key_exists('value', $value)) {
-						$newvalue = $value["value"];
+						$newvalue = stripslashes($value["value"]);
 					} else {
-						$newvalue = $value;
+						$newvalue = stripslashes($value);
 					}
 				} else {
 					$newvalue = $value;
@@ -108,7 +109,7 @@ class Adas_Divi_Public
 		// Check for nonce security      
 		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
 			wp_send_json_error('Busted');
-			die('Busted!');
+			die();
 		}
 		try {
 			// Prepared statement for security
@@ -121,7 +122,7 @@ class Adas_Divi_Public
 			wp_send_json_success("Entry with ID $id deleted successfully");
 
 		} catch (Exception $e) {
-			error_log("Error deleting entry: {$e->getMessage()}");		
+			wp_send_json_error("Error deleting entry: {$e->getMessage()}");		
 		}
 
 		wp_send_json_success('Error while deleting ."' . $id . '"');
@@ -141,7 +142,7 @@ class Adas_Divi_Public
 		$id = intval($_POST['id']);
 
 		// Parse the serialized form data
-		parse_str($form_data, $fields);
+		parse_str(stripslashes($form_data), $fields);
 
 		if (!$id) {
 			wp_send_json_error('Invalid ID');
@@ -186,12 +187,11 @@ class Adas_Divi_Public
 		global $wpdb;
 		
 		if ($et_contact_error === true) {
-			error_log('add_new_post errors ' . __FILE__ . ' on line ' . __LINE__);
 			return;
 		}
 
 		// Serialize the array data
-		$form_values = (serialize($processed_fields_values));
+		$form_values = serialize($processed_fields_values);
 		$page_id = get_the_ID();
 
 		// page submitted on details
@@ -207,7 +207,7 @@ class Adas_Divi_Public
 		$wpdb->insert(
 			$this->table_name,
 			array(
-				'form_values' => ($form_values),
+				'form_values' => sanitize_text_field($form_values),
 				'page_id' => $page_id,
 				'page_name' => $page_name,
 				'page_url' => $page_url,
@@ -224,7 +224,7 @@ class Adas_Divi_Public
 				'%s',
 				'%d',
 				'%s',
-				'%s' // Data format
+				'%s' 
 			)
 		);
 	}
@@ -235,15 +235,18 @@ class Adas_Divi_Public
 	 */
 	public function enqueue_styles()
 	{
+
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-public.css', array(), $this->version, 'all');
+		
 	}
 	
+
 	/**
 	 * Register the JavaScript for the public-facing side of the site.
 	 */
 	public function enqueue_scripts()
 	{
-
+		
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-public.js', array('jquery'), $this->version, false);
 
 	}

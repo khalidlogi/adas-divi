@@ -3,6 +3,7 @@
  * included in this file.
  */
 /* Styling for the kh-khcontainer */
+
 .form-values-khcontainer {
   font-family: Arial, sans-serif;
 }
@@ -10,6 +11,7 @@
 table#adastable{
   position: relative;
 }
+
 /* Styling for each set of form values */
 .form-set-khcontainer {
   background-color: #f7f7f7;
@@ -54,7 +56,6 @@ a.adaslink {
   transition: background-color 0.3s ease, box-shadow 0.3s ease,
     transform 0.3s ease;
 }
-/* Existing CSS styles */
 
 /* Styling for the delete button */
 .delete-btn {
@@ -75,9 +76,6 @@ a.adaslink {
 .delete-btn2:hover {
   color: #ff5555;
 }
-
-/* Rest of the existing CSS styles */
-/* Add these styles to your plugin's CSS file or style block */
 
 /* Style for the export button */
 .export-btn {
@@ -115,7 +113,6 @@ a.adaslink {
   position: relative;
 }
 
-/* Rest of your existing CSS styles */
 /* Styling for the edit popup */
 .edit-popup {
   position: fixed;
@@ -139,7 +136,6 @@ a.adaslink {
   position: relative;
 }
 
-/* Styling for the dismiss button */
 .dismiss-btn {
   position: absolute;
   top: 10px;
@@ -250,7 +246,7 @@ button.dismiss-btn {
   color: #333;
   text-decoration: none;
   border: 1px solid #ccc;
-  margin-right: 5px; /* Adjust the right margin between links as needed */
+  margin-right: 5px; 
 }
 
 .pagination-links a:hover {
@@ -259,7 +255,8 @@ button.dismiss-btn {
 
 .form-set-container {
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 15px;
+  margin: 3px;
   position: relative;
 }
 

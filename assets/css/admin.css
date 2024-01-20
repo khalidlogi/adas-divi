@@ -20,23 +20,19 @@
   display: inline-block;
   font-weight: 600;
   font-size: 17px;
-  /* background-color: #5a84b5; */
   color: #455473e3;
   border-radius: 4px;
   margin-right: 5px;
 }
+
 /* Primary label */
 .label-primary {
   font-size: 19px;
-  /* border-radius: 5%; */
   margin-top: 25px;
-    /* width: 192px; */
   text-align: center;
   color: #084ad5cf;
-  /* background: #c21d1d; */
 }
 .information-text {
-  /* background-color: #cce5ff; */
   width: 500px;
   color: #656b71;
   font-weight: 600;
@@ -94,8 +90,6 @@ input.form-control-items_per_page {
 }
 
 .Enable_data_saving_checkbox {
-  /* Define your custom styles */
-  /* For example: */
   width: 20px;
   height: 20px;
   background-color: #fff;
@@ -105,29 +99,27 @@ input.form-control-items_per_page {
 }
 
 .Enable_data_saving_checkbox:checked {
-  /* Define styles for the checked state */
-  /* For example: */
   background-color: #007bff;
   border-color: #007bff;
 }
 
 #form_id_setting option:checked {
-  background-color: #337ab7; /* Selected option background color */
-  color: #fff; /* Selected option text color */
+  background-color: #337ab7;
+  color: #fff;
 }
 
 #form_id_setting:hover {
-  border-color: #235a9d; /* Border color on hover */
+  border-color: #235a9d; 
 }
 
 #form_id_setting:focus {
-  border-color: #235a9d; /* Border color on focus */
+  border-color: #235a9d; 
 }
 /* Style the information icon */
 .my-settings-label i.fas.fa-info-circle {
   font-size: 16px;
-  color: #0073e6; /* Change to your desired color */
-  margin-left: 5px; /* Adjust the margin to control spacing */
+  color: #0073e6; 
+  margin-left: 5px; 
   cursor: pointer;
 }
 
@@ -136,8 +128,8 @@ input.form-control-items_per_page {
   content: attr(title);
   display: none;
   position: absolute;
-  background-color: #0073e6; /* Tooltip background color */
-  color: #fff; /* Tooltip text color */
+  background-color: #0073e6; 
+  color: #fff; 
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 12px;
@@ -164,7 +156,6 @@ input.form-control-items_per_page {
   border-color: blue;
 }
 
-/* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;

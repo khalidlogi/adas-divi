@@ -6,9 +6,11 @@ class Adas_Divi_KHwidget
 {
     public function __construct()
     {
+
         add_action('wp_dashboard_setup', array($this, 'register_adas_table_dashboard_widget'));
         // AJAX handler to update the option value
         add_action('wp_ajax_update_data_saving_option', array($this, 'update_data_saving_option'));
+
     }
 
 
@@ -17,11 +19,13 @@ class Adas_Divi_KHwidget
      */
     public function register_adas_table_dashboard_widget()
     {
+
         wp_add_dashboard_widget(
             'my_adas_table_dashboard_widget',
             'Adas Divi Add-on',
             array($this, 'adas_dashboard_widget_display')
         );
+
     }
 
 
@@ -30,11 +34,13 @@ class Adas_Divi_KHwidget
      */
     public function update_data_saving_option()
     {
+
         if (current_user_can('manage_options')) {
             $value_data_ischecked = $_POST['value_data_ischecked'];
             update_option('Enable_data_saving_checkbox', $value_data_ischecked);
         }
         wp_die();
+
     }
 
 
@@ -43,11 +49,12 @@ class Adas_Divi_KHwidget
      */
     public function adas_dashboard_widget_display()
     {
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'divi_table';
         $table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") === $table_name;
         if (!$table_exists) {
-            $message = __("Adas database data does not exist. Please try reactivating the plugin", "adasdividv");
+            $message = __("Adas database data does not exist. Please try reactivating the plugin", "adasdividb");
             $output = sprintf("<br><div>%s</div>", $message);           
             echo $output;        
         } else {
@@ -98,6 +105,7 @@ class Adas_Divi_KHwidget
             $this->adas_custom_widget_display();
 
         }
+
     }
 
 
@@ -106,6 +114,7 @@ class Adas_Divi_KHwidget
      */
     public function get_form_counts_and_recent_dates()
     {
+        
         global $wpdb;
         $table_name = $wpdb->prefix . 'divi_table';
 
@@ -129,8 +138,8 @@ class Adas_Divi_KHwidget
             echo '<br>';
             // Print the number of forms for each form ID
             foreach ($form_counts as $form_id => $count) {
-                $form_id_label = __('Form ID:', 'adasdividv');
-                $number_of_forms_label = __('Number of forms:', 'adasdividv');
+                $form_id_label = __('Form ID:', 'adasdividb');
+                $number_of_forms_label = __('Number of forms:', 'adasdividb');
                 
                 printf("<strong>%s</strong> %s, <strong>%s</strong> %s<br>",
                     $form_id_label,
@@ -141,7 +150,7 @@ class Adas_Divi_KHwidget
                 }
 
             // Get the date of last submissions
-            $last_submissions_label = __('Last three submissions', 'adasdividv');
+            $last_submissions_label = __('Last three submissions', 'adasdividb');
             printf('<br><h3><strong>%s</strong></h3>', $last_submissions_label);            
             $result = class_divi_KHdb::getInstance()->get_last_three_dates();
             foreach ($result as $result) {
@@ -169,8 +178,8 @@ class Adas_Divi_KHwidget
         if (!$results) {
 
             if (class_divi_KHdb::getInstance()->is_table_empty() === true) {
-                $message = __('Add entries to your form and try again.', 'adasdividv');
-                $link_label = __('Settings DB', 'adasdividv');
+                $message = __('Add entries to your form and try again.', 'adasdividb');
+                $link_label = __('Settings DB', 'adasdividb');
                 $link_url = esc_url(admin_url('admin.php?page=khdiviwplist.php'));
                 
                 echo sprintf(
@@ -198,12 +207,12 @@ class Adas_Divi_KHwidget
                 );
 
                 // Display the data
-                $recent_record_label = __('The most recent record', 'adasdividv');
+                $recent_record_label = __('The most recent record', 'adasdividb');
                 printf('<br><h3><strong>%s</strong></h3>', $recent_record_label);
 
                 foreach ($form_values as $form_value) {
-                $id_label = __('ID:', 'adasdividv');
-                $date_label = __('Date:', 'adasdividv');
+                $id_label = __('ID:', 'adasdividb');
+                $date_label = __('Date:', 'adasdividb');
                 printf('<strong>%s</strong> %s<br>', $id_label, $form_value['id']);
                 printf('<strong>%s</strong> %s<br>', $date_label, $form_value['date']);
 

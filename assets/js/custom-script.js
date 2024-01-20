@@ -16,7 +16,6 @@ jQuery(document).ready(function ($) {
 
     var formData = $("#edit-form").serialize();
     var formData = decodeURIComponent(formData); //decode data
-    //alert("formData: " + formData);
 
     $.ajax({
       type: "POST",
@@ -35,33 +34,21 @@ jQuery(document).ready(function ($) {
           .html('<i class="fa fa-spinner fa-spin"></i> Saving...');
       },
       success: function (response) {
-        console.log("response from PHP:", response);
 
         if (response.success) {
           // Select the div with the matching 'data-id' value and animate it
           var fields = response.data.fields;
-          console.log(
-            "fields from update: " +
-              JSON.stringify(response.data.fieldsfromupdate)
-          );
-          console.log("Form values updated successfully.");
-          button.html('<i class="fa fa-check"></i> Saved');
+                   button.html('<i class="fa fa-check"></i> Saved');
 
           $("#edit-popup").append(refreshButton);
           buttonAdded = true; // Set the flag to indicate the button is added.
 
           $("#refresh-page-button").click(function () {
-            console.log("Button clicked.");
             window.location.href = window.location.href;
           });
-        } else {
-          // Handle error
-          console.log("Error updating form values.");
-        }
+        } 
       },
       error: function (xhr, status, error) {
-        // Handle AJAX error
-        console.log("AJAX error:", error, xhr, status);
       },
       complete: function () {
         // Re-enable the button after the AJAX request is completed
@@ -73,7 +60,6 @@ jQuery(document).ready(function ($) {
   $(".edit-btn, .editbtn").on("click", function () {
     var form_id = $(this).data("form-id");
     var id = $(this).data("id");
-    console.log("Form ID:", form_id);
 
     $.ajax({
       type: "POST",
@@ -85,9 +71,7 @@ jQuery(document).ready(function ($) {
       },
 
       success: function (response) {
-        console.log(JSON.stringify(response));
         if (response.success) {
-          //$("button.update-btn").attr("data-id", "2");
           var fields = response.data.fields;
           // Clear existing inputs
           $("#edit-form").empty();
@@ -96,7 +80,6 @@ jQuery(document).ready(function ($) {
             `<label  id='myid' data-id='${id}'>Form id: ${id}</label>`
           );
 
-          console.log(fields);
           // Populate inputs with fetched fields
           var isAminField = false;
           $.each(fields, function (index, field) {
@@ -134,9 +117,6 @@ jQuery(document).ready(function ($) {
           // Show the edit popup form
           $("#edit-popup").show();
           $("#edit-popup").draggable();
-        } else {
-          // Handle error
-          console.log("Error fetching form fields.");
         }
       },
     });
@@ -151,7 +131,7 @@ jQuery(document).ready(function ($) {
     var data = {
       action: "export_form_data",
     };
-    // Create a URL by concatenating the "custom_vars.ajax_url" with the query parameters.
+
     var url = custom_vars.ajax_url + "?" + $.param(data);
     window.location.href = url;
   });
@@ -166,7 +146,7 @@ jQuery(document).ready(function ($) {
   });
 
   $(".delete-btn").on("click", function () {
-    //alert("tetststs");
+
     var form_id = $(this).data("form-id");
     var id = $(this).data("form-id");
     var nonce = $(this).data("nonce");
@@ -180,7 +160,6 @@ jQuery(document).ready(function ($) {
       };
 
       $.post(custom_vars.ajax_url, data, function (response) {
-        console.log(response);
         location.reload(); // Reload the page for demonstration
       });
     } else {

@@ -44,7 +44,6 @@ class Adas_Divi_Admin
 	 */
 	public function enqueue_styles()
 	{
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/adas-divi-admin.css', array(), $this->version, 'all');
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/font-awesome.css', array(), $this->version, 'all');
 
 	}
@@ -55,7 +54,7 @@ class Adas_Divi_Admin
 	 */
 	public function enqueue_scripts()
 	{
-		//wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-admin.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/adas-divi-admin.js', array('jquery'), $this->version, false);
 
 	}
 

@@ -28,6 +28,7 @@ class Adas_Divi_Activator
 	 */
 	public static function activate()
 	{
+		
 		global $wpdb;
 		$is_divi_active = class_divi_KHdb::getInstance()->is_divi_active();
 		self::Checking_things();
@@ -64,20 +65,21 @@ class Adas_Divi_Activator
 		add_action('admin_notices', 'adas_divi_theme_not_active_notice');
 	}
 	function adas_divi_theme_not_active_notice() {
+
 			echo '<div class="notice notice-error">
 					<p>' . __('The Divi theme is not active. Please activate the Divi theme to use this plugin.', 'adasdividb') . '</p>
 				  </div>';
+
 	}
 	
 	if ( version_compare( PHP_VERSION, $php, '<' ) ) {
 		deactivate_plugins( basename( __FILE__ ) );
 		wp_die(
 			'<p>' .
-			sprintf(
-				__( 'This plugin can not be activated because it requires a PHP version greater than %1$s. Your PHP version can be updated by your hosting company.', 'adasdividb' ),
-				$php
-			)
-			. '</p> <a href="' . esc_url(admin_url( 'plugins.php' )) . '">' . __( 'go back', 'adasdividb' ) . '</a>'
+			esc_html_e( 'This plugin cannot be activated because it requires a PHP version greater than your current PHP version. Your PHP version can be updated by your hosting company.', 'adasdividb' )
+			. '</p> <a href="' . esc_url(admin_url( 'plugins.php' )) . '">' . __( 'Go back', 'adasdividb' ) . '</a>',
+			'Plugin Activation Error',
+			array( 'response' => 200 )
 		);
 	}
 
@@ -85,11 +87,10 @@ class Adas_Divi_Activator
 		deactivate_plugins( basename( __FILE__ ) );
 		wp_die(
 			'<p>' .
-			sprintf(
-				__( 'This plugin can not be activated because it requires a WordPress version greater than %1$s. Please go to Dashboard &#9656; Updates to gran the latest version of WordPress .', 'adasdividb' ),
-				$php
-			)
-			. '</p> <a href="' .  esc_url(admin_url( 'plugins.php' )) . '">' . __( 'go back', 'adasdividb' ) . '</a>'
+			esc_html_e( 'This plugin cannot be activated because it requires a WordPress version greater than your current WordPress version. Please go to Dashboard; Updates to grab the latest version of WordPress.', 'adasdividb' )
+			. '</p> <a href="' . esc_url(admin_url( 'plugins.php' )) . '">' . __( 'Go back', 'adasdividb' ) . '</a>',
+			'Plugin Activation Error',
+			array( 'response' => 200 )
 		);
 	}
 }

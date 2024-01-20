@@ -9,6 +9,7 @@ class class_divi_KHdb
     private static $instance;
     public function __construct()
     {
+
         global $wpdb;
         $this->table_name = $wpdb->prefix . 'divi_table';
 
@@ -17,6 +18,7 @@ class class_divi_KHdb
         }
 
         $this->items_per_page = get_option('items_per_page') ? get_option('items_per_page') : 10;
+
     }
 
 
@@ -39,8 +41,8 @@ class class_divi_KHdb
      */
     public function count_items($formid = null)
     {
-        global $wpdb;
 
+        global $wpdb;
         // Check if table exists
         $table_name = $wpdb->prefix . 'divi_table';
         if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -93,7 +95,7 @@ class class_divi_KHdb
         }
 
         if ($this->is_table_empty() === true) {
-            error_log("empty data table");
+            wp_send_json_error("empty data table");
             $divi_form_id = 0;
         }
 
@@ -155,6 +157,7 @@ class class_divi_KHdb
      */
     function is_table_empty()
     {
+
         global $wpdb;
 
         // Check if the table exists
@@ -164,13 +167,10 @@ class class_divi_KHdb
         }
         $count = $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
         if ($count === '0') {
-            error_log('Table is hhh empty');
             return true; // Table is empty
 
         } else {
-            error_log('Table is empty');
             return false; // Table has data
-
         }
     }
 
@@ -180,13 +180,13 @@ class class_divi_KHdb
      */
     function getDate()
     {
+
         global $wpdb;
         $first_date_query = $wpdb->get_var("SELECT MIN(date_submitted) FROM $this->table_name");
-        error_log('$first_date_query: ' . print_r($first_date_query, true));
-        error_log('in ' . __FILE__ . ' on line ' . __LINE__);
         $last_date_query = $wpdb->get_var("SELECT MAX(date_submitted) FROM $this->table_name");
         $datecsv = "Initial Date: $first_date_query | Final Date: $last_date_query";
-        return $datecsv;
+        return esc_html($datecsv);
+
     }
 
 
@@ -195,19 +195,19 @@ class class_divi_KHdb
      */
     public function retrieve_form_values_pdf($formid = '')
     {
+
         global $wpdb;
         $query = "SELECT * FROM {$this->table_name} ORDER BY date_submitted DESC";
         $results = $wpdb->get_results($query);
 
         if (!$results) {
-            error_log("Database error: " . $wpdb->last_error);
+            wp_send_json_error("Database error: " . $wpdb->last_error);
         } else {
             foreach ($results as $result) {
-                $date = $result->date_submitted;
-                $serialized_data = $result->form_values;
-                $form_id = $result->contact_form_id;
-                $date = $result->date_submitted;
-                $id = $result->id;
+                $date = sanitize_text_field($result->date_submitted);
+                $serialized_data = sanitize_text_field($result->form_values);
+                $form_id = sanitize_text_field($result->contact_form_id);
+                $id = absint($result->id);
 
                 // Unserialize the serialized form value
                 $unserialized_data = unserialize($serialized_data);
@@ -221,6 +221,7 @@ class class_divi_KHdb
             }
             return $form_values;
         }
+        
     }
 
 
@@ -229,6 +230,7 @@ class class_divi_KHdb
      */
     public function retrieve_form_values($formid = '', $offset = '', $items_per = '', $LIMIT = '')
     {
+
         global $wpdb;
         // Check if the table exists
         if ($wpdb->get_var("SHOW TABLES LIKE '$this->table_name'") != $this->table_name) {
@@ -259,21 +261,21 @@ class class_divi_KHdb
                     "SELECT DISTINCT id, form_values, contact_form_id, date_submitted FROM {$this->table_name} 
                      WHERE contact_form_id IN ($formid_placeholders) LIMIT   $offset,
                     $items_per",
-                    $formids   // Argument unpacking handles all arguments
+                    $formids 
                 )
 
             );
         }
 
         if (!$results) {
-            error_log("Database error: " . $wpdb->last_error);
+            wp_send_json_error("Database error: " . $wpdb->last_error);
         } else {
             foreach ($results as $result) {
+                $date = sanitize_text_field($result->date_submitted);
+                $serialized_data = sanitize_text_field($result->form_values);
+                $form_id = sanitize_text_field($result->contact_form_id);
                 $date = $result->date_submitted;
-                $serialized_data = $result->form_values;
-                $form_id = $result->contact_form_id;
-                $date = $result->date_submitted;
-                $id = $result->id;
+                $id = absint($result->id);
 
                 // Unserialize the serialized form value
                 $unserialized_data = unserialize($serialized_data);
@@ -297,10 +299,12 @@ class class_divi_KHdb
      */
     public static function getInstance()
     {
+
         if (!isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
+
     }
 }
 

@@ -2,8 +2,6 @@
 
 use Dompdf\Dompdf;
 
-error_reporting(E_ALL);
-
 if (!class_exists('class_divi_KHPDF')) {
 
     class class_divi_KHPDF
@@ -72,8 +70,7 @@ if (!class_exists('class_divi_KHPDF')) {
                             }
                         }
 
-                        $value = empty($value) ? "----" : $value;
-
+                        $value = empty($value) ? "----" : esc_attr($value);
                         $html_table .= sprintf('<tr style="background: %s; border-bottom: 1px solid #ccc;">',$background_color);
                         $html_table .= sprintf('<td style="padding:10px; border-bottom:1px solid #ccc; color:Charcoal;">%d</td>', $id);
                         $html_table .= sprintf('<td style="padding:10px; border-bottom:1px solid #ccc; color:gray;">%s</td>', $form_id);
@@ -85,11 +82,11 @@ if (!class_exists('class_divi_KHPDF')) {
                             $html_table .= sprintf('<td style="padding:10px; border-bottom:1px solid #ccc; color:blue;">%s</td>', esc_attr($value));
                         }
 
-                        $html_table .= '</tr>';
+                        $html_table .= sprintf('</tr>');
                     }
                 }}
 
-                $html_table .= '</tbody></table>';
+                $html_table .= sprintf('</tbody></table>');
                 $dompdf->loadHtml($html_table);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();

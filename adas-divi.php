@@ -2,7 +2,7 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name:       Adas Form Db Divi
+ * Plugin Name:       Adas Forms DB
  * Plugin URI:        https://web-pro.store/adas-divi-add-on/
  * Description:       Enhance Divi Contact Form with a powerful database feature for effortless storage and organization of form submissions.
 

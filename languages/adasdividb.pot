@@ -1,0 +1,200 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Adas Form Db Divi\n"
+"POT-Creation-Date: 2024-01-18 14:57+0100\n"
+"PO-Revision-Date: 2024-01-17 21:16+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: adas-divi.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: admin/class-adas-divi-KHwidget.php:57
+msgid "Adas database data does not exist. Please try reactivating the plugin"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:141
+#: public/class-adas-divi-shortcode.php:192
+msgid "Form ID:"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:142
+msgid "Number of forms:"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:153
+msgid "Last three submissions"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:181
+msgid "Add entries to your form and try again."
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:182
+#: public/class-adas-divi-shortcode.php:104
+msgid "Settings DB"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:210
+msgid "The most recent record"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:214
+msgid "ID:"
+msgstr ""
+
+#: admin/class-adas-divi-KHwidget.php:215
+#: public/class-adas-divi-shortcode.php:205
+msgid "Date:"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:27
+msgid "Adas"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:87
+msgid "Database settings"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:103 public/class_divi_KHCSV.php:41
+msgid "Form ID"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:117
+msgid "Entries Per Page"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:134
+msgid "Pause Data Saving"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:151
+msgid "Background Color"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:168
+msgid "Text Color"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:182
+msgid "Label Text Color"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:196
+msgid "Export Button Background Color"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:252
+msgid "Divi Theme is not active!"
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:261
+msgid ""
+"To select multiple IDs, press and hold the Ctrl button while selecting IDs."
+msgstr ""
+
+#. translators: %s: PHP version
+#: admin/class-adas-divi-settings.php:280
+msgid ""
+"Currently, no data has been submitted. Kindly submit at least one form using "
+"Divi Contact Form."
+msgstr ""
+
+#: admin/class-adas-divi-settings.php:360
+msgid "Save Settings"
+msgstr ""
+
+#: includes/class-adas-divi-activator.php:70
+msgid ""
+"The Divi theme is not active. Please activate the Divi theme to use this "
+"plugin."
+msgstr ""
+
+#: includes/class-adas-divi-activator.php:79
+msgid ""
+"This plugin cannot be activated because it requires a PHP version greater "
+"than your current PHP version. Your PHP version can be updated by your "
+"hosting company."
+msgstr ""
+
+#: includes/class-adas-divi-activator.php:80
+#: includes/class-adas-divi-activator.php:91
+msgid "Go back"
+msgstr ""
+
+#: includes/class-adas-divi-activator.php:90
+msgid ""
+"This plugin cannot be activated because it requires a WordPress version "
+"greater than your current WordPress version. Please go to Dashboard; Updates "
+"to grab the latest version of WordPress."
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:103
+msgid "No data available! Please add entries to your form and try again."
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:131
+msgid "Divi Theme is not ACTIVE"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:138
+msgid "To update the form ID value"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:139
+msgid "settings page"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:140
+msgid "Visit the"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:150
+msgid "Number of forms submitted:"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:180 public/class_divi_KHCSV.php:40
+msgid "ID"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:266
+msgid "Export as CSV"
+msgstr ""
+
+#: public/class-adas-divi-shortcode.php:271
+msgid "Export as PDF"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Adas Form Db Divi"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://web-pro.store/adas-divi-add-on/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Enhance Divi Contact Form with a powerful database feature for effortless "
+"storage and organization of form submissions."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "khalidlogi"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://web-pro.store/"
+msgstr ""

@@ -8,11 +8,13 @@ if (!class_exists('class_divi_KHCSV')) {
         private $myselectedformid;
         public function __construct()
         {
+
             $this->myselectedformid = sanitize_text_field(class_divi_KHdb::getInstance()->retrieve_form_id());
             if (class_divi_KHdb::getInstance()->is_table_empty() !== true) {
             add_action('wp_ajax_export_form_data', array($this, 'export_form_data'));
             add_action('wp_ajax_nopriv_export_form_data', array($this, 'export_form_data'));
             }
+
         }
 
         
@@ -21,6 +23,7 @@ if (!class_exists('class_divi_KHCSV')) {
          */
         public function export_form_data()
         {
+
             global $wpdb;
             $this->myselectedformid = class_divi_KHdb::getInstance()->retrieve_form_id();
             
@@ -32,7 +35,11 @@ if (!class_exists('class_divi_KHCSV')) {
                 wp_die();
             }
 
-            $csv_table = "ID, Form ID, Field, Value\n";
+            printf(
+                "%s, %s, Field, Value\n",
+                __('ID', 'adasdividb'),
+                __('Form ID', 'adasdividb')
+            );
 
             if($form_values){                
                 foreach ($form_values as $form_value) {
@@ -62,7 +69,7 @@ if (!class_exists('class_divi_KHCSV')) {
 
             // Set the response headers for downloading
             header('Content-Type:text/csv');
-            header('Content-Disposition: attachment; filename="WPForms-Data-Entries-' . date('Y-m-d') . '.csv"');
+            header('Content-Disposition: attachment; filename="DIVI-Contact-Entries-' . date('Y-m-d') . '.csv"');
 
             // Output the CSV table
             echo $csv_table;

@@ -45,4 +45,4 @@ class Adas_Divi_Deactivator {
 
 			}
 
-		}
+	}
