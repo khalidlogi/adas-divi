@@ -57,7 +57,7 @@ class Adas_Divi_Public
 		$serialized_data = $wpdb->get_results($query);
 
 		if ($wpdb->last_error) {
-			wp_send_json_error('Error: ' . $wpdb->last_error);
+			//wp_send_json_error('Error: ' . $wpdb->last_error);
 		}
 
 		if ($serialized_data) {
@@ -81,9 +81,7 @@ class Adas_Divi_Public
 				);
 			}
 			wp_send_json_success(array('fields' => $fields));
-		} else {
-			wp_send_json_error('Form values not found for the given form_id.');
-		}
+		} 
 
 	}
 
@@ -97,18 +95,15 @@ class Adas_Divi_Public
 		$id = intval($_POST['id']);
 
 		if (!$id) {
-			wp_send_json_error('Invalid ID');
 			exit;
 		}
 		// Check permissions
 		if (!current_user_can('manage_options')) {
-			wp_send_json_error('Insufficient permissions');
 			exit;
 		}
 
 		// Check for nonce security      
 		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
-			wp_send_json_error('Busted');
 			die();
 		}
 		try {
@@ -119,13 +114,11 @@ class Adas_Divi_Public
 					$id
 				)
 			);
-			wp_send_json_success("Entry with ID $id deleted successfully");
 
 		} catch (Exception $e) {
-			wp_send_json_error("Error deleting entry: {$e->getMessage()}");		
+			error_log("Error deleting entry: {$e->getMessage()}");		
 		}
 
-		wp_send_json_success('Error while deleting ."' . $id . '"');
 		exit;
 	}
 
@@ -145,13 +138,11 @@ class Adas_Divi_Public
 		parse_str(stripslashes($form_data), $fields);
 
 		if (!$id) {
-			wp_send_json_error('Invalid ID');
 			exit;
 		}
 
 		// Check permissions
 		if (!current_user_can('manage_options')) {
-			wp_send_json_error('Insufficient permissions');
 			exit;
 		}
 
@@ -174,6 +165,8 @@ class Adas_Divi_Public
 			// Update was successful, send a success response
 			wp_send_json_success(array('message' => 'Update successful!', 'fieldsfromupdate' => $fields));
 		}
+
+		
 
 	}
 

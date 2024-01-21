@@ -31,7 +31,6 @@ if (!class_exists('class_divi_KHCSV')) {
             $form_values = class_divi_KHdb::getInstance()->retrieve_form_values_pdf($this->myselectedformid);
             
             if (empty($form_values)) {
-                wp_send_json_error('Error fetching data');
                 wp_die();
             }
 

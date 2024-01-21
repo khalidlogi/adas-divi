@@ -95,7 +95,6 @@ class class_divi_KHdb
         }
 
         if ($this->is_table_empty() === true) {
-            wp_send_json_error("empty data table");
             $divi_form_id = 0;
         }
 
@@ -201,7 +200,7 @@ class class_divi_KHdb
         $results = $wpdb->get_results($query);
 
         if (!$results) {
-            wp_send_json_error("Database error: " . $wpdb->last_error);
+            error_log("Database error: ");
         } else {
             foreach ($results as $result) {
                 $date = sanitize_text_field($result->date_submitted);
@@ -268,7 +267,7 @@ class class_divi_KHdb
         }
 
         if (!$results) {
-            wp_send_json_error("Database error: " . $wpdb->last_error);
+            error_log("Database error: ");
         } else {
             foreach ($results as $result) {
                 $date = sanitize_text_field($result->date_submitted);
